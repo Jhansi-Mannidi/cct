@@ -110,9 +110,6 @@ function StoryCard({
   const [likeCount, setLikeCount] = useState(story.likes)
   const [showShare, setShowShare] = useState(false)
 
-  // Random rotation for pinboard feel (-1 to 1 degrees)
-  const rotation = ((index % 5) - 2) * 0.5
-
   const handleLike = () => {
     if (liked) {
       setLikeCount(prev => prev - 1)
@@ -128,7 +125,6 @@ function StoryCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      style={{ rotate: rotation }}
       className="bg-white rounded-2xl shadow-lg shadow-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300"
     >
       {/* Image Placeholder with Gradient */}
@@ -500,8 +496,7 @@ export function GoodWorksFeed() {
           <motion.button
             onClick={() => setShowModal(true)}
             initial={{ scale: 1 }}
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+            animate={{ scale: 1 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all"

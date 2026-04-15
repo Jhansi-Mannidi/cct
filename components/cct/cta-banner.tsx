@@ -11,14 +11,12 @@ export function CTABanner() {
     offset: ["start end", "end start"],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], [50, -50])
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.8, 1, 1, 0.8])
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden">
+    <section ref={ref} className="relative py-20 overflow-hidden">
       {/* Background with Parallax */}
       <motion.div
-        style={{ y }}
         className="absolute inset-0 bg-gradient-to-br from-[#CC0033] via-[#8F002A] to-[#1B3F72]"
       >
         {/* Pattern Overlay */}
