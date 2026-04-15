@@ -5,6 +5,8 @@ import { motion } from "framer-motion"
 import { AnnouncementBar } from "@/components/cct/announcement-bar"
 import { CCTNavigation } from "@/components/cct/navigation"
 import { HeroSection } from "@/components/cct/hero"
+import { MegastarSpotlight } from "@/components/cct/megastar-spotlight"
+import { HomeTopSlider } from "@/components/cct/home-top-slider"
 import { ImpactTicker } from "@/components/cct/impact-ticker"
 import { HowItWorksSection } from "@/components/cct/how-it-works"
 import { FeaturedCampaignsSection } from "@/components/cct/featured-campaigns"
@@ -46,8 +48,8 @@ import { Heart, Droplet, Calendar, Users, Trophy, Info, Search, UserPlus } from 
 function HomePage({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
     <>
-      {/* 1. Hero Section */}
-      <HeroSection onNavigate={onNavigate} />
+      {/* 1. Top Infinite Slider (Hero + Megastar) */}
+      <HomeTopSlider onNavigate={onNavigate} />
       
       {/* 2. Impact Ticker Strip */}
       <ImpactTicker />
