@@ -160,15 +160,6 @@ export function HeroSection() {
         style={{ y, opacity }}
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 text-center"
       >
-        <motion.span
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.6 }}
-          className="inline-flex items-center px-4 py-1.5 mb-6 rounded-full border border-white/35 bg-white/10 text-white/90 text-xs md:text-sm font-medium backdrop-blur-sm"
-        >
-          Megastar · Fan Community · Impact Platform
-        </motion.span>
-
         {/* Main Headline with two fixed lines */}
         <motion.h1 className="inline-block text-left font-serif text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.05] mb-6 drop-shadow-[0_8px_20px_rgba(0,0,0,0.28)]">
           <motion.span

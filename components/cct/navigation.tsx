@@ -83,7 +83,7 @@ export function CCTNavigation({
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={cn(
         "fixed left-0 right-0 z-50 transition-all duration-500",
-        announcementVisible ? "top-10" : "top-0",
+        announcementVisible && !isScrolled ? "top-10" : "top-0",
         isScrolled 
           ? "bg-white/95 backdrop-blur-xl shadow-lg shadow-black/5 py-2" 
           : "bg-white/80 backdrop-blur-sm py-4"
