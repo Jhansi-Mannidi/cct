@@ -43,11 +43,11 @@ import { MobileQRCheckin } from "@/components/cct/mobile-qr-checkin"
 import { Heart, Droplet, Calendar, Users, Trophy, Info, Search, UserPlus } from "lucide-react"
 
 // Home Page with all 8 sections as per Prompt 1.1
-function HomePage() {
+function HomePage({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
     <>
       {/* 1. Hero Section */}
-      <HeroSection />
+      <HeroSection onNavigate={onNavigate} />
       
       {/* 2. Impact Ticker Strip */}
       <ImpactTicker />
@@ -242,7 +242,7 @@ function MobileQRPage() {
 function renderPage(page: string, onNavigate: (page: string) => void) {
   switch (page) {
     case "home":
-      return <HomePage />
+      return <HomePage onNavigate={onNavigate} />
     case "campaigns":
       return <CampaignsPage />
     case "events":

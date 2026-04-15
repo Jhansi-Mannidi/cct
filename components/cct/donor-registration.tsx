@@ -1195,7 +1195,7 @@ export function DonorRegistration({ onClose, onComplete }: { onClose?: () => voi
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF7ED] py-8 px-4">
+    <div className="min-h-screen bg-[#FFF7ED] px-4 py-8 pt-28 md:pt-32 flex items-start justify-center">
       <div className="max-w-lg mx-auto">
         {/* Close button */}
         {onClose && (

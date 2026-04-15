@@ -93,7 +93,11 @@ const textRevealVariants = {
   }),
 }
 
-export function HeroSection() {
+interface HeroSectionProps {
+  onNavigate?: (page: string) => void
+}
+
+export function HeroSection({ onNavigate }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -202,6 +206,7 @@ export function HeroSection() {
           <motion.button
             whileHover={{ scale: 1.04, y: -1, boxShadow: "0 0 36px rgba(204, 0, 51, 0.58)" }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => onNavigate?.("register")}
             className="px-8 py-4 bg-[#CC0033] text-white font-semibold rounded-full flex items-center gap-3 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A6002A] transition-colors"
           >
             <Droplet className="w-5 h-5" />
