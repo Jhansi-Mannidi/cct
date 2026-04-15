@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 import { 
   Menu, X, Heart, Droplet, Calendar, Users, ChevronDown, 
   Search, Trophy, Sparkles, Info, UserPlus, Building2, Award,
-  User
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -211,14 +210,6 @@ export function CCTNavigation({
 
           {/* Right Side - CTA & User */}
           <div className="hidden lg:flex items-center gap-3">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="p-2 text-[#374151] hover:text-[#1A1A1A] hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <User className="w-5 h-5" />
-            </motion.button>
-            
             <motion.button
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}

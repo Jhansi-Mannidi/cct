@@ -19,7 +19,7 @@ export function CTABanner() {
       {/* Background with Parallax */}
       <motion.div
         style={{ y }}
-        className="absolute inset-0 bg-gradient-to-br from-[#DC2626] via-[#B91C1C] to-[#991B1B]"
+        className="absolute inset-0 bg-gradient-to-br from-[#CC0033] via-[#8F002A] to-[#1B3F72]"
       >
         {/* Pattern Overlay */}
         <div 
