@@ -164,86 +164,91 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
         style={{ y, opacity }}
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-28 text-center"
       >
-        {/* Main Headline with two fixed lines */}
-        <motion.h1 className="inline-block text-left font-serif text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] mb-6 drop-shadow-[0_8px_20px_rgba(0,0,0,0.28)]">
-          <motion.span
-            custom={0}
-            initial="hidden"
-            animate="visible"
-            variants={textRevealVariants}
-            className="block"
-          >
-            Every drop counts..
-          </motion.span>
-          <motion.span
-            custom={1}
-            initial="hidden"
-            animate="visible"
-            variants={textRevealVariants}
-            className="block mt-1 pl-[5.3ch] md:pl-[5.1ch]"
-          >
-            Every rupee saves ..
-          </motion.span>
-        </motion.h1>
-
-        {/* Subheadline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="text-sm md:text-base lg:text-lg text-white/90 font-sans max-w-2xl mx-auto mb-10"
-        >
-          Join 28,000+ donors building India&apos;s largest blood donation community.
-        </motion.p>
-
-        {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14"
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          <motion.button
-            whileHover={{ scale: 1.04, y: -1, boxShadow: "0 0 36px rgba(204, 0, 51, 0.58)" }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onNavigate?.("register")}
-            className="px-5 py-2.5 bg-[#CC0033] text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A6002A] transition-colors"
-          >
-            <Droplet className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            Register as Donor
-            <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.04, y: -1, backgroundColor: "rgba(255,255,255,0.2)" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-5 py-2.5 bg-transparent border border-white/70 text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
-          >
-            <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            Donate Funds
-          </motion.button>
-        </motion.div>
+          {/* Main Headline with two fixed lines */}
+          <motion.h1 className="inline-block text-left font-serif text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] mb-6 drop-shadow-[0_8px_20px_rgba(0,0,0,0.28)]">
+            <motion.span
+              custom={0}
+              initial="hidden"
+              animate="visible"
+              variants={textRevealVariants}
+              className="block"
+            >
+              Every drop counts..
+            </motion.span>
+            <motion.span
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={textRevealVariants}
+              className="block mt-1 pl-[5.3ch] md:pl-[5.1ch]"
+            >
+              Every rupee saves ..
+            </motion.span>
+          </motion.h1>
 
-        {/* Animated Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 bg-white/12 rounded-3xl p-7 md:p-8"
-        >
-          {stats.map((stat, index) => {
-            const isFunds = stat.label === "Funds Raised"
-            return (
-              <div key={stat.label} className="relative">
-                <StatCounter
-                  value={stat.value}
-                  suffix={stat.suffix}
-                  label={isFunds ? `${String.fromCharCode(8377)}2.3Cr Raised` : stat.label}
-                />
-                {index < stats.length - 1 && null}
-              </div>
-            )
-          })}
+          {/* Subheadline */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.6 }}
+            className="text-sm md:text-base lg:text-lg text-white/90 font-sans max-w-2xl mx-auto mb-10"
+          >
+            Join 28,000+ donors building India&apos;s largest blood donation community.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4, duration: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14"
+          >
+            <motion.button
+              whileHover={{ scale: 1.04, y: -1, boxShadow: "0 0 36px rgba(204, 0, 51, 0.58)" }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onNavigate?.("register")}
+              className="px-5 py-2.5 bg-[#CC0033] text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A6002A] transition-colors"
+            >
+              <Droplet className="w-3.5 h-3.5 md:w-4 md:h-4" />
+              Register as Donor
+              <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.04, y: -1, backgroundColor: "rgba(255,255,255,0.2)" }}
+              whileTap={{ scale: 0.95 }}
+              className="px-5 py-2.5 bg-transparent border border-white/70 text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
+            >
+              <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
+              Donate Funds
+            </motion.button>
+          </motion.div>
+
+          {/* Animated Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.6, duration: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 bg-white/12 rounded-3xl p-7 md:p-8"
+          >
+            {stats.map((stat, index) => {
+              const isFunds = stat.label === "Funds Raised"
+              return (
+                <div key={stat.label} className="relative">
+                  <StatCounter
+                    value={stat.value}
+                    suffix={stat.suffix}
+                    label={isFunds ? `${String.fromCharCode(8377)}2.3Cr Raised` : stat.label}
+                  />
+                  {index < stats.length - 1 && null}
+                </div>
+              )
+            })}
+          </motion.div>
         </motion.div>
       </motion.div>
 
