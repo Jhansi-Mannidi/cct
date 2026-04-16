@@ -47,7 +47,7 @@ const urgentRequests = [
   },
 ]
 
-export function BloodInventorySection() {
+export function BloodInventorySection({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
@@ -180,6 +180,7 @@ export function BloodInventorySection() {
                     variant={request.urgency === "critical" ? "primary" : "secondary"} 
                     size="sm" 
                     className="flex-1"
+                    onClick={() => onNavigate?.("donate")}
                   >
                     <Droplet className="w-4 h-4" />
                     Donate Now

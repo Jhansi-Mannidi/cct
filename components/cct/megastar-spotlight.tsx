@@ -37,7 +37,7 @@ export function MegastarSpotlight({ onNavigate }: MegastarSpotlightProps) {
               className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.05]"
             >
               More than a
-              <span className="block text-[#E4A423] italic font-normal">Megastar.</span>
+              <span className="block text-[#E4A423] italic font-normal">Megastar</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 18 }}
@@ -80,6 +80,7 @@ export function MegastarSpotlight({ onNavigate }: MegastarSpotlightProps) {
               <motion.button
                 whileHover={{ scale: 1.04, y: -1, backgroundColor: "rgba(255,255,255,0.2)" }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => onNavigate?.("donate")}
                 className="px-5 py-2.5 bg-transparent border border-white/70 text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
               >
                 <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />

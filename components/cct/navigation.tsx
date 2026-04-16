@@ -89,7 +89,7 @@ export function CCTNavigation({
           : "bg-white/80 backdrop-blur-sm py-4"
       )}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="w-full px-2 sm:px-3 lg:px-4">
         <div className={cn(
           "flex items-center justify-between transition-all duration-300",
           isScrolled ? "h-14" : "h-16"
@@ -116,18 +116,13 @@ export function CCTNavigation({
                   isScrolled ? "w-5 h-5" : "w-6 h-6"
                 )} />
               </motion.div>
-              <motion.div
-                animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-[#F59E0B] rounded-full"
-              />
             </div>
             <div className="hidden sm:block">
               <span className="font-serif text-xl font-bold text-[#1A1A1A] tracking-tight">CCT</span>
               <p className={cn(
-                "text-[#6B7280] transition-all duration-300",
+                "text-[#6B7280] font-semibold transition-all duration-300",
                 isScrolled ? "text-[10px] -mt-1" : "text-xs -mt-0.5"
-              )}>Chiranjeevi Charitable Trust</p>
+                )}>Chiranjeevi Charitable Trust</p>
             </div>
           </motion.a>
 
@@ -213,7 +208,8 @@ export function CCTNavigation({
             <motion.button
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="relative px-6 py-2.5 bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300"
+              onClick={() => handleNavClick("#donate")}
+              className="relative px-4 py-2 text-sm bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300"
             >
               {/* Pulsing glow effect */}
               <motion.div
@@ -226,7 +222,18 @@ export function CCTNavigation({
               />
               <span className="flex items-center gap-2">
                 <Heart className="w-4 h-4" />
-                Donate Now
+                Donate Funds
+              </span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleNavClick("#register")}
+              className="px-4 py-2 text-sm border border-[#DC2626] text-[#DC2626] font-semibold rounded-xl hover:bg-red-50 transition-all duration-300"
+            >
+              <span className="flex items-center gap-2">
+                <UserPlus className="w-4 h-4" />
+                Register as Donors
               </span>
             </motion.button>
           </div>
@@ -393,20 +400,30 @@ export function CCTNavigation({
                   ))}
                 </div>
 
-                {/* CTA Button */}
+                {/* CTA Buttons */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="mt-8 pt-8 border-t border-gray-100"
+                  className="mt-8 pt-8 border-t border-gray-100 space-y-3"
                 >
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full px-6 py-4 bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-semibold text-lg rounded-xl shadow-lg shadow-red-500/30 flex items-center justify-center gap-2"
+                    onClick={() => handleNavClick("#donate")}
+                    className="w-full px-5 py-3 bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 flex items-center justify-center gap-2"
                   >
                     <Heart className="w-5 h-5" />
-                    Donate Now
+                    Donate Funds
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleNavClick("#register")}
+                    className="w-full px-5 py-3 border border-[#DC2626] text-[#DC2626] font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-red-50 transition-colors"
+                  >
+                    <UserPlus className="w-5 h-5" />
+                    Register as Donors
                   </motion.button>
                 </motion.div>
               </div>

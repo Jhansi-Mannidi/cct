@@ -67,9 +67,9 @@ export function Footer() {
       {/* Main Footer - 4 Column Grid */}
       <div className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr] gap-10 lg:gap-x-12 lg:gap-y-8">
             {/* Brand Column */}
-            <div className="sm:col-span-2 lg:col-span-1">
+            <div className="sm:col-span-2 lg:col-span-1 lg:pr-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
                   <Droplet className="w-6 h-6 text-white" />

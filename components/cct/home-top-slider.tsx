@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { HeroSection } from "@/components/cct/hero"
 import { MegastarSpotlight } from "@/components/cct/megastar-spotlight"
 import { ServicesSpotlight } from "@/components/cct/services-spotlight"
+import { CTABanner } from "@/components/cct/cta-banner"
 
 interface HomeTopSliderProps {
   onNavigate: (page: string) => void
@@ -22,7 +23,7 @@ export function HomeTopSlider({ onNavigate }: HomeTopSliderProps) {
   }, [])
 
   useEffect(() => {
-    if (activeSlide !== 3) return
+    if (activeSlide !== 4) return
 
     const resetTimer = setTimeout(() => {
       setWithTransition(false)
@@ -33,7 +34,7 @@ export function HomeTopSlider({ onNavigate }: HomeTopSliderProps) {
     return () => clearTimeout(resetTimer)
   }, [activeSlide])
 
-  const visibleSlide = activeSlide % 3
+  const visibleSlide = activeSlide % 4
 
   return (
     <section className="relative overflow-hidden">
@@ -48,7 +49,10 @@ export function HomeTopSlider({ onNavigate }: HomeTopSliderProps) {
           <MegastarSpotlight onNavigate={onNavigate} />
         </div>
         <div className="w-full shrink-0">
-          <ServicesSpotlight />
+          <ServicesSpotlight onNavigate={onNavigate} />
+        </div>
+        <div className="w-full shrink-0">
+          <CTABanner onNavigate={onNavigate} />
         </div>
         <div className="w-full shrink-0">
           <HeroSection onNavigate={onNavigate} />
@@ -56,7 +60,7 @@ export function HomeTopSlider({ onNavigate }: HomeTopSliderProps) {
       </div>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {[0, 1, 2].map((dot) => (
+        {[0, 1, 2, 3].map((dot) => (
           <button
             key={dot}
             onClick={() => setActiveSlide(dot)}

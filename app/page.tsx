@@ -4,8 +4,6 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { AnnouncementBar } from "@/components/cct/announcement-bar"
 import { CCTNavigation } from "@/components/cct/navigation"
-import { HeroSection } from "@/components/cct/hero"
-import { MegastarSpotlight } from "@/components/cct/megastar-spotlight"
 import { HomeTopSlider } from "@/components/cct/home-top-slider"
 import { ImpactTicker } from "@/components/cct/impact-ticker"
 import { HowItWorksSection } from "@/components/cct/how-it-works"
@@ -13,7 +11,6 @@ import { FeaturedCampaignsSection } from "@/components/cct/featured-campaigns"
 import { BloodInventorySnapshot } from "@/components/cct/blood-inventory-snapshot"
 import { UpcomingEventsSection } from "@/components/cct/upcoming-events"
 import { DonorWallPreview } from "@/components/cct/donor-wall"
-import { CTABanner } from "@/components/cct/cta-banner"
 import { Footer } from "@/components/cct/footer"
 import { ToastProvider } from "@/components/cct/toast"
 import { PageTransition, staggerContainer, staggerItem } from "@/components/cct/page-transition"
@@ -31,7 +28,7 @@ import { EventsPages } from "@/components/cct/events-pages"
 import { DonorWallPage } from "@/components/cct/donor-wall-page"
 import { DonorRegistration } from "@/components/cct/donor-registration"
 import { BloodRequestFlow } from "@/components/cct/blood-request-flow"
-import { DonationFlow } from "@/components/cct/donation-flow"
+import { DonateFundsPage } from "@/components/cct/donate-funds-page"
 import { PostDonationJourney } from "@/components/cct/post-donation-journey"
 import { UserProfileDashboard } from "@/components/cct/user-profile-dashboard"
 import { GoodWorksFeed } from "@/components/cct/good-works-feed"
@@ -69,13 +66,11 @@ function HomePage({ onNavigate }: { onNavigate: (page: string) => void }) {
       {/* 7. Donor Wall Preview */}
       <DonorWallPreview />
       
-      {/* 8. CTA Banner */}
-      <CTABanner />
     </>
   )
 }
 
-function CampaignsPage() {
+function CampaignsPage({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
     <motion.div 
       variants={staggerContainer}
@@ -83,7 +78,7 @@ function CampaignsPage() {
       animate="visible"
       className="pt-24"
     >
-      <CampaignPages />
+      <CampaignPages onNavigate={onNavigate} />
     </motion.div>
   )
 }
@@ -168,23 +163,7 @@ function FindBloodPage() {
 }
 
 function DonatePage({ onNavigate }: { onNavigate?: (page: string) => void }) {
-  const handleComplete = (action: string) => {
-    if (onNavigate) {
-      if (action === "campaigns") {
-        onNavigate("campaigns")
-      } else if (action === "register") {
-        onNavigate("register")
-      } else {
-        onNavigate("home")
-      }
-    }
-  }
-
-  return (
-    <DonationFlow 
-      onComplete={handleComplete}
-    />
-  )
+  return <DonateFundsPage onNavigate={onNavigate} />
 }
 
 function ContactPage() {
@@ -246,7 +225,7 @@ function renderPage(page: string, onNavigate: (page: string) => void) {
     case "home":
       return <HomePage onNavigate={onNavigate} />
     case "campaigns":
-      return <CampaignsPage />
+      return <CampaignsPage onNavigate={onNavigate} />
     case "events":
       return <EventsPage />
     case "about":
@@ -284,7 +263,7 @@ function renderPage(page: string, onNavigate: (page: string) => void) {
     case "contact":
       return <ContactPage />
     default:
-      return <HomePage />
+      return <HomePage onNavigate={onNavigate} />
   }
 }
 

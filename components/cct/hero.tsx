@@ -121,7 +121,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Gradient Mesh Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#CC0033] via-[#8F002A] to-[#1B3F72]">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#C81924] via-[#9D1520] to-[#1B3F72]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.16),transparent_30%),radial-gradient(circle_at_80%_75%,rgba(232,159,29,0.15),transparent_32%)]" />
         {/* Noise Texture Overlay */}
         <div 
@@ -138,7 +138,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             opacity: [0.3, 0.5, 0.3],
           }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#CC0033]/40 rounded-full blur-[120px]"
+          className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#C81924]/40 rounded-full blur-[120px]"
         />
         <motion.div
           animate={{
@@ -169,7 +169,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
           {/* Main Headline with two fixed lines */}
-          <motion.h1 className="inline-block text-left font-serif text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] mb-6 drop-shadow-[0_8px_20px_rgba(0,0,0,0.28)]">
+          <motion.h1 className="inline-block text-left font-serif text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-[1.05] mb-6 drop-shadow-[0_8px_20px_rgba(0,0,0,0.28)]">
             <motion.span
               custom={0}
               initial="hidden"
@@ -211,7 +211,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
               whileHover={{ scale: 1.04, y: -1, boxShadow: "0 0 36px rgba(204, 0, 51, 0.58)" }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onNavigate?.("register")}
-              className="px-5 py-2.5 bg-[#CC0033] text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A6002A] transition-colors"
+            className="px-5 py-2.5 bg-[#C81924] text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A3131C] transition-colors"
             >
               <Droplet className="w-3.5 h-3.5 md:w-4 md:h-4" />
               Register as Donor
@@ -221,6 +221,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             <motion.button
               whileHover={{ scale: 1.04, y: -1, backgroundColor: "rgba(255,255,255,0.2)" }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => onNavigate?.("donate")}
               className="px-5 py-2.5 bg-transparent border border-white/70 text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
             >
               <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
@@ -252,25 +253,6 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2"
-        >
-          <motion.div
-            animate={{ y: [0, 12, 0], opacity: [1, 0, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1.5 h-1.5 bg-white rounded-full"
-          />
-        </motion.div>
-      </motion.div>
     </section>
   )
 }
