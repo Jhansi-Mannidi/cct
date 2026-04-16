@@ -40,6 +40,26 @@ const campaigns = [
   },
 ]
 
+const gridVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.14,
+      delayChildren: 0.2,
+    },
+  },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.55, ease: "easeOut" as const },
+  },
+}
+
 function formatINR(amount: number): string {
   if (amount >= 10000000) {
     return `\u20B9${(amount / 10000000).toFixed(2)} Cr`
@@ -91,19 +111,37 @@ export function FeaturedCampaignsSection() {
           transition={{ duration: 0.6 }}
           className="flex flex-col md:flex-row md:items-end md:justify-between mb-12"
         >
-          <div>
-            <span className="inline-block px-4 py-1.5 bg-amber-100 text-[#F59E0B] text-sm font-semibold rounded-full mb-4">
+          <div className="space-y-4">
+            <motion.span
+              initial={{ opacity: 0, y: 12 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="inline-block px-4 py-1.5 bg-amber-100 text-[#F59E0B] text-sm font-semibold rounded-full"
+            >
               Financial Giving
-            </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
+            </motion.span>
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, delay: 0.2 }}
+              className="font-serif text-4xl md:text-5xl font-bold text-[#1A1A1A]"
+            >
               Active Campaigns
-            </h2>
-            <p className="text-lg text-[#6B7280] max-w-xl">
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, delay: 0.3 }}
+              className="text-lg text-[#6B7280] max-w-xl"
+            >
               Support our initiatives to strengthen blood banking infrastructure and save more lives.
-            </p>
+            </motion.p>
           </div>
           <motion.a
             href="#"
+            initial={{ opacity: 0, x: -10 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.35 }}
             whileHover={{ x: 5 }}
             className="flex items-center gap-2 text-[#DC2626] font-semibold mt-4 md:mt-0 group"
           >
@@ -113,14 +151,21 @@ export function FeaturedCampaignsSection() {
         </motion.div>
 
         {/* Campaigns Grid - Horizontal scroll on mobile */}
-        <div className="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible snap-x snap-mandatory md:snap-none">
+        <motion.div
+          variants={gridVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible snap-x snap-mandatory md:snap-none"
+        >
           {campaigns.map((campaign, index) => (
             <motion.div
               key={campaign.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + index * 0.15 }}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              variants={cardVariants}
+              whileHover={{
+                y: -10,
+                scale: 1.02,
+                transition: { duration: 0.25, ease: "easeOut" },
+              }}
               className="min-w-[300px] md:min-w-0 snap-center"
             >
               <div className={`relative bg-gradient-to-br ${campaign.gradient} rounded-3xl overflow-hidden shadow-xl`}>
@@ -143,6 +188,12 @@ export function FeaturedCampaignsSection() {
 
                 {/* Cover Image Placeholder */}
                 <div className="relative h-48 overflow-hidden">
+                  <motion.div
+                    initial={{ x: "-100%" }}
+                    animate={isInView ? { x: "140%" } : {}}
+                    transition={{ duration: 1.2, ease: "easeInOut", delay: 0.45 + index * 0.12 }}
+                    className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                  />
                   <div className="absolute inset-0 bg-black/20" />
                   <div 
                     className="absolute inset-0 opacity-30"
@@ -192,7 +243,7 @@ export function FeaturedCampaignsSection() {
 
                   {/* CTA */}
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.02, y: -1 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full py-3 bg-white text-[#1A1A1A] font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
                   >
@@ -203,7 +254,7 @@ export function FeaturedCampaignsSection() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

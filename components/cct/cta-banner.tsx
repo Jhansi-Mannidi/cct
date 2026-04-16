@@ -2,9 +2,13 @@
 
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
-import { ArrowRight, Droplet } from "lucide-react"
+import { ArrowRight, Droplet, Heart } from "lucide-react"
 
-export function CTABanner() {
+interface CTABannerProps {
+  onNavigate?: (page: string) => void
+}
+
+export function CTABanner({ onNavigate }: CTABannerProps) {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -14,19 +18,11 @@ export function CTABanner() {
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.8, 1, 1, 0.8])
 
   return (
-    <section ref={ref} className="relative py-20 overflow-hidden">
+    <section ref={ref} className="relative min-h-screen overflow-hidden flex items-center">
       {/* Background with Parallax */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-[#CC0033] via-[#8F002A] to-[#1B3F72]"
+        className="absolute inset-0 bg-gradient-to-br from-[#C81924] via-[#B91822] to-[#F2E8EA]"
       >
-        {/* Pattern Overlay */}
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fff' fill-opacity='1'%3E%3Cpath d='M36 18c-9.941 0-18 8.059-18 18s8.059 18 18 18 18-8.059 18-18-8.059-18-18-18zm0 32c-7.732 0-14-6.268-14-14s6.268-14 14-14 14 6.268 14 14-6.268 14-14 14z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
-        
         {/* Animated Gradient Orbs */}
         <motion.div
           animate={{
@@ -49,7 +45,7 @@ export function CTABanner() {
       {/* Content */}
       <motion.div
         style={{ opacity }}
-        className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
       >
         {/* Icon */}
         <motion.div
@@ -68,7 +64,7 @@ export function CTABanner() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+          className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
         >
           Your blood can save 3 lives.
         </motion.h2>
@@ -79,29 +75,43 @@ export function CTABanner() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto"
+          className="text-base md:text-lg text-white/90 mb-10 max-w-2xl mx-auto"
         >
           Register as a donor today and become a hero in your community.
         </motion.p>
 
-        {/* CTA Button */}
-        <motion.button
+        {/* CTA Buttons */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          whileHover={{ 
-            scale: 1.05, 
-            backgroundColor: "#DC2626",
-            color: "#FFFFFF",
-            boxShadow: "0 0 40px rgba(255,255,255,0.3)"
-          }}
-          whileTap={{ scale: 0.95 }}
-          className="px-10 py-5 bg-white text-[#DC2626] font-bold text-lg rounded-full inline-flex items-center gap-3 shadow-xl transition-colors"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          Register Now
-          <ArrowRight className="w-5 h-5" />
-        </motion.button>
+          <motion.button
+            whileHover={{
+              scale: 1.05,
+              y: -2,
+              boxShadow: "0 12px 28px rgba(200,25,36,0.32)"
+            }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onNavigate?.("register")}
+            className="px-6 py-2.5 bg-[#C81924] text-white font-semibold text-sm md:text-base rounded-full inline-flex items-center gap-2 shadow-lg shadow-red-500/35 hover:bg-[#AE1620] transition-colors"
+          >
+            Register as Donor
+            <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.04, y: -1, backgroundColor: "rgba(255,255,255,0.2)" }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onNavigate?.("donate")}
+            className="px-6 py-2.5 bg-transparent border border-white/70 text-white text-sm md:text-base font-semibold rounded-full inline-flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
+          >
+            <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            Donate Funds
+          </motion.button>
+        </motion.div>
       </motion.div>
     </section>
   )

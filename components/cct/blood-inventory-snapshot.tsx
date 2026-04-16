@@ -90,11 +90,6 @@ export function BloodInventorySnapshot() {
                 className="group relative bg-card rounded-3xl border border-border px-5 py-5 shadow-sm"
               >
                 <div className="absolute top-4 right-4">
-                  <span className={`
-                    absolute -inset-1.5 rounded-full border border-current opacity-0 scale-75
-                    transition-all duration-300 ease-out group-hover:opacity-45 group-hover:scale-100
-                    ${config.text}
-                  `} />
                   <div className={`
                     relative w-2.5 h-2.5 rounded-full animate-pulse
                     ${config.dot}

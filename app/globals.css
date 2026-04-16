@@ -5,9 +5,9 @@
 
 :root {
   /* Editorial look from reference design */
-  --cct-primary: #CC0033;
-  --cct-primary-light: #CC0033;
-  --cct-primary-dark: #CC0033;
+  --cct-primary: #C81924;
+  --cct-primary-light: #C81924;
+  --cct-primary-dark: #C81924;
   --cct-secondary: #111111;
   --cct-secondary-light: #2a2a2a;
   --cct-accent: #e89f1d;
@@ -25,7 +25,7 @@
   --card-foreground: #171512;
   --popover: #fffdf8;
   --popover-foreground: #171512;
-  --primary: #CC0033;
+  --primary: #C81924;
   --primary-foreground: #ffffff;
   --secondary: #111111;
   --secondary-foreground: #ffffff;
@@ -33,15 +33,15 @@
   --muted-foreground: #6d665f;
   --accent: #e89f1d;
   --accent-foreground: #171512;
-  --destructive: #CC0033;
+  --destructive: #C81924;
   --destructive-foreground: #ffffff;
   --border: #ddd3c8;
   --input: #ddd3c8;
-  --ring: #CC0033;
+  --ring: #C81924;
   --radius: 0.625rem;
   
   /* Chart colors */
-  --chart-1: #CC0033;
+  --chart-1: #C81924;
   --chart-2: #111111;
   --chart-3: #e89f1d;
   --chart-4: #1a9c53;
@@ -211,13 +211,18 @@ html {
 .bg-\[\#DC2626\],
 .bg-red-600,
 .bg-red-500 { background-color: var(--primary) !important; }
+.bg-\[\#CC0033\] { background-color: var(--primary) !important; }
+.bg-\[\#8F002A\] { background-color: var(--primary) !important; }
+.bg-\[\#A6002A\] { background-color: var(--primary) !important; }
 .bg-\[\#B91C1C\] { background-color: var(--cct-primary-dark) !important; }
 .bg-\[\#EF4444\] { background-color: var(--cct-primary-light) !important; }
 
 .text-\[\#DC2626\],
 .text-red-600,
 .text-red-500 { color: var(--primary) !important; }
+.text-\[\#CC0033\] { color: var(--primary) !important; }
 .border-\[\#DC2626\] { border-color: var(--primary) !important; }
+.border-\[\#CC0033\] { border-color: var(--primary) !important; }
 .focus\:ring-\[\#DC2626\]:focus { --tw-ring-color: var(--primary) !important; }
 .focus\:border-\[\#DC2626\]:focus { border-color: var(--primary) !important; }
 

@@ -501,9 +501,11 @@ function CampaignCard({
 function CampaignDetailView({
   campaign,
   onBack,
+  onDonate,
 }: {
   campaign: typeof CAMPAIGNS[0]
   onBack: () => void
+  onDonate?: () => void
 }) {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(1000)
   const [customAmount, setCustomAmount] = useState("")
@@ -836,6 +838,7 @@ function CampaignDetailView({
               <motion.button
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={onDonate}
                 className="w-full py-4 bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-bold rounded-xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all flex items-center justify-center gap-2 text-lg"
               >
                 <Heart className="w-5 h-5" />
@@ -865,6 +868,7 @@ function CampaignDetailView({
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={onDonate}
             className="px-8 py-3 bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-bold rounded-xl shadow-lg shadow-red-500/30 flex items-center gap-2"
           >
             <Heart className="w-5 h-5" />
@@ -877,7 +881,7 @@ function CampaignDetailView({
 }
 
 // Main Campaign Pages Component
-export function CampaignPages() {
+export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => void }) {
   const [activeFilter, setActiveFilter] = useState("all")
   const [selectedCity, setSelectedCity] = useState("All Cities")
   const [statusFilter, setStatusFilter] = useState<"active" | "completed">("active")
@@ -911,6 +915,7 @@ export function CampaignPages() {
           key="detail"
           campaign={selectedCampaign}
           onBack={() => setSelectedCampaign(null)}
+          onDonate={() => onNavigate?.("donate")}
         />
       ) : (
         <motion.div
