@@ -1,291 +1,211 @@
 "use client"
 
-import { motion, useScroll, useTransform, useInView } from "framer-motion"
-import { useRef, useState, useEffect } from "react"
-import { Droplet, ArrowRight, Heart } from "lucide-react"
-import { useLanguage } from "./language-context"
-
-// Animated counter hook
-function useAnimatedCounter(target: number, duration: number = 2000, startOnView: boolean = true) {
-  const [count, setCount] = useState(0)
-  const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true })
-  
-  useEffect(() => {
-    if (!startOnView || !isInView) return
-    
-    let startTime: number | null = null
-    const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime
-      const progress = Math.min((currentTime - startTime) / duration, 1)
-      setCount(Math.floor(progress * target))
-      if (progress < 1) {
-        requestAnimationFrame(animate)
-      }
-    }
-    requestAnimationFrame(animate)
-  }, [isInView, target, duration, startOnView])
-  
-  return { count, ref }
-}
-
-// Stat Counter Component
-function StatCounter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
-  const { count, ref } = useAnimatedCounter(value)
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="text-center"
-    >
-      <span ref={ref} className="text-xl md:text-2xl lg:text-3xl font-bold text-white [text-shadow:none]">
-        {value >= 100000 ? `${(count / 100000).toFixed(1)}L` : count.toLocaleString()}{suffix}
-      </span>
-      <p className="text-white/75 text-xs md:text-sm mt-1 tracking-wide">{label}</p>
-    </motion.div>
-  )
-}
-
-// Floating Blood Drop Component
-function FloatingBloodDrop({
-  delay,
-  x,
-  top,
-  size,
-  duration,
-}: {
-  delay: number
-  x: number
-  top: number
-  size: number
-  duration: number
-}) {
-  return (
-    <motion.div
-      initial={{ y: -50, x, opacity: 0 }}
-      animate={{
-        y: [0, 30, 0],
-        opacity: [0.3, 0.6, 0.3],
-      }}
-      transition={{
-        y: { duration, repeat: Infinity, ease: "easeInOut", delay },
-        opacity: { duration, repeat: Infinity, ease: "easeInOut", delay },
-      }}
-      className="absolute pointer-events-none"
-      style={{ left: `${x}%`, top: `${top}%` }}
-    >
-      <svg
-        width={size}
-        height={size * 1.3}
-        viewBox="0 0 24 32"
-        fill="none"
-        className="text-white/20"
-      >
-        <path
-          d="M12 0C12 0 0 14 0 22C0 27.523 5.373 32 12 32C18.627 32 24 27.523 24 22C24 14 12 0 12 0Z"
-          fill="currentColor"
-        />
-      </svg>
-    </motion.div>
-  )
-}
-
-const FLOATING_DROPS = [
-  { x: 8, top: 18, size: 22, duration: 4.6 },
-  { x: 15, top: 62, size: 28, duration: 5.2 },
-  { x: 24, top: 36, size: 26, duration: 4.9 },
-  { x: 31, top: 72, size: 30, duration: 5.5 },
-  { x: 39, top: 21, size: 24, duration: 4.7 },
-  { x: 47, top: 56, size: 34, duration: 5.8 },
-  { x: 56, top: 30, size: 20, duration: 4.4 },
-  { x: 64, top: 67, size: 31, duration: 5.4 },
-  { x: 73, top: 24, size: 27, duration: 4.8 },
-  { x: 81, top: 59, size: 25, duration: 5.1 },
-  { x: 89, top: 40, size: 29, duration: 5.6 },
-  { x: 95, top: 74, size: 23, duration: 4.5 },
-]
-
-// Text Reveal Animation
-const textRevealVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.15,
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  }),
-}
+import { motion, useInView } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
 
 interface HeroSectionProps {
   onNavigate?: (page: string) => void
 }
 
+const textRevealVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.1 + i * 0.12,
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  }),
+}
+
+function useAnimatedCounter(target: number, duration: number = 1800) {
+  const [count, setCount] = useState(0)
+  const ref = useRef<HTMLSpanElement>(null)
+  const isInView = useInView(ref, { once: true, margin: "-80px" })
+
+  useEffect(() => {
+    if (!isInView) return
+    let startTime: number | null = null
+    let raf = 0
+    const tick = (now: number) => {
+      if (startTime === null) startTime = now
+      const progress = Math.min((now - startTime) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.floor(eased * target))
+      if (progress < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [isInView, target, duration])
+
+  return { count, ref }
+}
+
+function HeroStat({ value, display, label }: { value: number; display: (n: number) => string; label: string }) {
+  const { count, ref } = useAnimatedCounter(value)
+  return (
+    <div>
+      <span ref={ref} className="font-display text-2xl md:text-3xl font-extrabold text-white leading-none block">
+        {display(count)}
+      </span>
+      <span className="mt-1.5 block text-[10px] tracking-[0.1em] uppercase text-white/55">
+        {label}
+      </span>
+    </div>
+  )
+}
+
 export function HeroSection({ onNavigate }: HeroSectionProps) {
-  const { language } = useLanguage()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  })
-
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-
-  const stats = [
-    { value: 1200000, suffix: "+", label: "Units Collected" },
-    { value: 4700, suffix: "+", label: "Lives Saved" },
-    { value: 28000, suffix: "+", label: "Active Donors" },
-    { value: 23000000, suffix: "", label: "Funds Raised" },
-  ]
-
   return (
     <section
-      ref={containerRef}
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative w-full overflow-hidden bg-[#F4EFE6]"
     >
-      {/* Gradient Mesh Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#C81924] via-[#9D1520] to-[#1B3F72]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.16),transparent_30%),radial-gradient(circle_at_80%_75%,rgba(232,159,29,0.15),transparent_32%)]" />
-        {/* Noise Texture Overlay */}
-        <div 
-          className="absolute inset-0 opacity-[0.12]"
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:min-h-[calc(100vh-84px)]">
+        {/* LEFT — RED PANE */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="relative isolate flex flex-col justify-between overflow-hidden px-6 pt-28 pb-16 sm:px-10 sm:pt-32 md:px-12 md:pt-36 md:pb-20 lg:px-[52px] lg:pt-40 lg:pb-[72px] lg:[clip-path:polygon(0_0,100%_0,90%_100%,0_100%)]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            backgroundImage: `linear-gradient(120deg, rgba(200,25,36,0.92) 0%, rgba(170,16,36,0.9) 62%, rgba(140,10,28,0.9) 100%), url('/images/chiranjeevi.jpg')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
-        />
-        
-        {/* Animated Gradient Orbs */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#C81924]/40 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#1B3F72]/60 rounded-full blur-[100px]"
-        />
-      </div>
-
-      {/* Floating Blood Drops */}
-      {FLOATING_DROPS.map((drop, i) => (
-        <FloatingBloodDrop
-          key={i}
-          delay={i * 0.5}
-          x={drop.x}
-          top={drop.top}
-          size={drop.size}
-          duration={drop.duration}
-        />
-      ))}
-
-      <motion.div
-        style={{ y, opacity }}
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-28 text-center"
-      >
-        <motion.div
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          {/* Main Headline with two fixed lines */}
-          <motion.h1 className="inline-block text-left font-serif text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-[1.05] mb-6 drop-shadow-[0_8px_20px_rgba(0,0,0,0.28)]">
-            <motion.span
-              custom={0}
-              initial="hidden"
-              animate="visible"
-              variants={textRevealVariants}
-              className="block"
-            >
-              Every drop counts..
+          {/* Soft vignette */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-[5%] -top-[30%] h-[120%] w-[65%] rounded-full bg-black/10"
+          />
+
+          {/* Kicker */}
+          <motion.div
+            custom={0}
+            initial="hidden"
+            animate="visible"
+            variants={textRevealVariants}
+            className="relative z-10"
+          >
+            <div className="font-display whitespace-nowrap text-xl sm:text-2xl md:text-[32px] lg:text-[36px] font-extrabold uppercase tracking-[0.04em] leading-[1.05] text-white">
+              Chiranjeevi Charitable Trust
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">
+              <span className="h-[1.5px] w-[18px] bg-white/35" />
+              Est. 1997
+            </div>
+          </motion.div>
+
+          {/* Big headline */}
+          <motion.h1
+            className="relative z-10 mt-10 font-display text-[clamp(68px,9vw,120px)] font-extrabold leading-[0.9] tracking-[-0.04em] text-white"
+          >
+            <motion.span custom={1} initial="hidden" animate="visible" variants={textRevealVariants} className="block">
+              DROP
+            </motion.span>
+            <motion.span custom={2} initial="hidden" animate="visible" variants={textRevealVariants} className="block">
+              GIVE
             </motion.span>
             <motion.span
-              custom={1}
+              custom={3}
               initial="hidden"
               animate="visible"
               variants={textRevealVariants}
-              className="block mt-1 pl-[5.3ch] md:pl-[5.1ch]"
+              className="block font-italic-serif italic font-normal text-[0.68em] text-white/85"
             >
-              Every rupee saves ..
+              Live
             </motion.span>
           </motion.h1>
 
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-            className="text-sm md:text-base lg:text-lg text-white/90 font-sans max-w-2xl mx-auto mb-10"
-          >
-            {language === "te"
-              ? "భారతదేశంలో అతిపెద్ద రక్తదాన కుటుంబాన్ని నిర్మిస్తున్న 28,000+ దాతలతో మీరు కూడా చేరండి."
-              : "Join 28,000+ donors building India&apos;s largest blood donation community."}
-          </motion.p>
-
-          {/* CTA Buttons */}
+          {/* Foot: stats */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4, duration: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14"
+            transition={{ delay: 0.8, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="relative z-10 mt-14 flex flex-wrap items-end gap-6"
           >
-            <motion.button
-              whileHover={{ scale: 1.04, y: -1, boxShadow: "0 0 36px rgba(204, 0, 51, 0.58)" }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onNavigate?.("register")}
-            className="px-5 py-2.5 bg-[#C81924] text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A3131C] transition-colors"
-            >
-              <Droplet className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              {language === "te" ? "రక్తదానం చేయండి" : "Donate Blood"}
-              <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            </motion.button>
-            
-            <motion.button
-              whileHover={{ scale: 1.04, y: -1, backgroundColor: "rgba(255,255,255,0.2)" }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onNavigate?.("donate")}
-              className="px-5 py-2.5 bg-transparent border border-white/70 text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
-            >
-              <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              {language === "te" ? "సహకరించండి" : "Contribute"}
-            </motion.button>
-          </motion.div>
-
-          {/* Animated Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.6, duration: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 bg-white/12 rounded-3xl p-7 md:p-8"
-          >
-            {stats.map((stat, index) => {
-              const isFunds = stat.label === "Funds Raised"
-              return (
-                <div key={stat.label} className="relative">
-                  <StatCounter
-                    value={stat.value}
-                    suffix={stat.suffix}
-                    label={isFunds ? `${String.fromCharCode(8377)}2.3Cr Raised` : stat.label}
-                  />
-                  {index < stats.length - 1 && null}
-                </div>
-              )
-            })}
+            <div className="flex gap-6 md:gap-8">
+              <HeroStat value={12} display={(n) => `${n}L+`} label="Units" />
+              <HeroStat value={47} display={(n) => `${(n / 10).toFixed(1)}K`} label="Lives" />
+              <HeroStat value={28} display={(n) => `${n}K`} label="Donors" />
+            </div>
           </motion.div>
         </motion.div>
-      </motion.div>
 
+        {/* RIGHT — CREAM PANE */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="flex flex-col justify-between gap-10 bg-[#F4EFE6] px-6 pt-24 pb-14 sm:px-10 sm:pt-28 md:px-12 md:pt-32 md:pb-20 lg:px-20 lg:pt-40 lg:pb-[72px]"
+        >
+          {/* Chip */}
+          <motion.span
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.5 }}
+            className="inline-flex w-fit items-center rounded-md bg-[#0D0905] px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#FEFCF8]"
+          >
+            Megastar · Fan Community · Impact Platform
+          </motion.span>
+
+          {/* Mid content */}
+          <div className="flex flex-1 flex-col justify-center py-4">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+              className="mb-5 font-italic-serif text-[clamp(26px,3.2vw,42px)] italic leading-[1.25] text-[#6B5C4A]"
+            >
+              Millions of fans
+              <br />
+              <strong className="not-italic font-display font-extrabold text-[#0D0905]">One mission</strong>
+              <br />
+              Infinite lives changed
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="mb-8 max-w-[420px] text-[15px] leading-[1.85] text-[#6B5C4A]"
+            >
+              You don&apos;t need a cape to be a hero. One pint of blood. One rupee. One story shared.
+              The Chiranjeevi Charitable Trust turns love into action — across blood donation,
+              community giving, and a legacy of care.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.65, duration: 0.6 }}
+              className="flex flex-wrap gap-2.5"
+            >
+              <motion.button
+                whileHover={{ y: -2, backgroundColor: "#CC0033", boxShadow: "0 6px 18px rgba(204,0,51,0.3)" }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => onNavigate?.("donate")}
+                className="rounded-full bg-[#0D0905] px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.04em] text-[#FEFCF8] transition-colors"
+              >
+                Support a Cause
+              </motion.button>
+              <motion.button
+                whileHover={{ borderColor: "#C98A0A", color: "#C98A0A", backgroundColor: "#FEF3D7" }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => onNavigate?.("good-works")}
+                className="rounded-full border-[1.5px] border-[#DDD3C4] bg-transparent px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.04em] text-[#0D0905] transition-colors"
+              >
+                See Good Works
+              </motion.button>
+            </motion.div>
+          </div>
+
+        </motion.div>
+      </div>
     </section>
   )
 }
