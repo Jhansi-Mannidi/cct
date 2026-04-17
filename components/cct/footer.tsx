@@ -6,6 +6,7 @@ import {
   Droplet, Heart, MapPin, Phone, Mail, ArrowUp,
   Facebook, Twitter, Instagram, Youtube, Linkedin
 } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 const footerLinks = {
   aboutCCT: [
@@ -17,7 +18,7 @@ const footerLinks = {
     { label: "Careers", href: "#careers" },
   ],
   quickLinks: [
-    { label: "Register as Donor", href: "#register" },
+    { label: "Donate Blood", href: "#register" },
     { label: "Find Blood", href: "#find-blood" },
     { label: "Blood Inventory", href: "#inventory" },
     { label: "Upcoming Events", href: "#events" },
@@ -51,6 +52,7 @@ const socialLinks = [
 ]
 
 export function Footer() {
+  const { language } = useLanguage()
   const [showBackToTop, setShowBackToTop] = useState(false)
   const { scrollY } = useScroll()
 
@@ -63,11 +65,11 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-[#1E3A5F] text-white relative">
+    <footer className="bg-[#0A0A0A] text-white relative">
       {/* Main Footer - 4 Column Grid */}
       <div className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr] gap-10 lg:gap-x-12 lg:gap-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-x-12 lg:gap-y-8">
             {/* Brand Column */}
             <div className="sm:col-span-2 lg:col-span-1 lg:pr-6">
               <div className="flex items-center gap-3 mb-6">
@@ -76,12 +78,15 @@ export function Footer() {
                 </div>
                 <div>
                   <span className="font-serif text-xl font-bold">CCT</span>
-                  <p className="text-xs text-white/60">Chiranjeevi Charitable Trust</p>
+                  <p className="text-xs text-white/60">
+                    {language === "te" ? "చిరంజీవి చారిటబుల్ ట్రస్ట్" : "Chiranjeevi Charitable Trust"}
+                  </p>
                 </div>
               </div>
               <p className="text-white/70 mb-6 max-w-sm leading-relaxed text-sm">
-                Dedicated to ensuring no one in Andhra Pradesh or Telangana ever has 
-                to struggle to find blood during emergencies. Every drop counts.
+                {language === "te"
+                  ? "ఆంధ్రప్రదేశ్ మరియు తెలంగాణలో అత్యవసర సమయంలో రక్తం కోసం ఎవ్వరూ ఇబ్బంది పడకూడదనే లక్ష్యంతో మేము పనిచేస్తున్నాము. ప్రతి చుక్క అమూల్యం."
+                  : "Dedicated to ensuring no one in Andhra Pradesh or Telangana ever has to struggle to find blood during emergencies. Every drop counts."}
               </p>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-white/70">
@@ -101,7 +106,7 @@ export function Footer() {
 
             {/* About CCT */}
             <div>
-              <h4 className="font-semibold text-lg mb-5">About CCT</h4>
+              <h4 className="font-semibold text-lg mb-5 text-[#C9A961]">{language === "te" ? "సీసీటీ గురించి" : "About CCT"}</h4>
               <ul className="space-y-3">
                 {footerLinks.aboutCCT.map((link) => (
                   <li key={link.label}>
@@ -119,7 +124,7 @@ export function Footer() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="font-semibold text-lg mb-5">Quick Links</h4>
+              <h4 className="font-semibold text-lg mb-5 text-[#C9A961]">{language === "te" ? "త్వరిత లింకులు" : "Quick Links"}</h4>
               <ul className="space-y-3">
                 {footerLinks.quickLinks.map((link) => (
                   <li key={link.label}>
@@ -137,7 +142,7 @@ export function Footer() {
 
             {/* Get Involved */}
             <div>
-              <h4 className="font-semibold text-lg mb-5">Get Involved</h4>
+              <h4 className="font-semibold text-lg mb-5 text-[#C9A961]">{language === "te" ? "భాగస్వామ్యం అవ్వండి" : "Get Involved"}</h4>
               <ul className="space-y-3">
                 {footerLinks.getInvolved.map((link) => (
                   <li key={link.label}>
@@ -155,7 +160,7 @@ export function Footer() {
 
             {/* Contact */}
             <div>
-              <h4 className="font-semibold text-lg mb-5">Contact</h4>
+              <h4 className="font-semibold text-lg mb-5 text-[#C9A961]">{language === "te" ? "సంప్రదించండి" : "Contact"}</h4>
               <ul className="space-y-3">
                 {footerLinks.contact.map((link) => (
                   <li key={link.label}>
@@ -179,7 +184,7 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-white/60 text-sm text-center md:text-left">
-              &copy; {new Date().getFullYear()} Chiranjeevi Charitable Trust. All rights reserved.
+              &copy; {new Date().getFullYear()} {language === "te" ? "చిరంజీవి చారిటబుల్ ట్రస్ట్. అన్ని హక్కులు రిజర్వ్ చేయబడ్డాయి." : "Chiranjeevi Charitable Trust. All rights reserved."}
             </p>
             
             {/* Social Media Icons */}
@@ -200,13 +205,16 @@ export function Footer() {
 
             <div className="flex items-center gap-6">
               <a href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                Privacy Policy
+                {language === "te" ? "గోప్యతా విధానం" : "Privacy Policy"}
               </a>
               <a href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                Terms of Service
+                {language === "te" ? "సేవా నిబంధనలు" : "Terms of Service"}
               </a>
             </div>
           </div>
+          <p className="mt-5 text-center text-xs text-white/45">
+            Built by VoltusWave AI Solutions
+          </p>
         </div>
       </div>
 

@@ -2,12 +2,14 @@
 
 import { motion } from "framer-motion"
 import { ArrowRight, Droplet, Heart } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 interface MegastarSpotlightProps {
   onNavigate?: (page: string) => void
 }
 
 export function MegastarSpotlight({ onNavigate }: MegastarSpotlightProps) {
+  const { language } = useLanguage()
   return (
     <section className="min-h-screen bg-gradient-to-r from-[#050607] via-[#160304] to-[#2C0000]">
       <div className="grid md:grid-cols-2 min-h-screen">
@@ -25,9 +27,9 @@ export function MegastarSpotlight({ onNavigate }: MegastarSpotlightProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-[10px] tracking-[0.24em] text-[#E4A423] uppercase mb-5"
+              className="text-sm md:text-base tracking-[0.24em] text-[#E4A423] uppercase mb-5"
             >
-              The Man Behind The Mission
+              {language === "te" ? "మిషన్ వెనుక ఉన్న వ్యక్తి" : "The Man Behind The Mission"}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -36,8 +38,8 @@ export function MegastarSpotlight({ onNavigate }: MegastarSpotlightProps) {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.05]"
             >
-              More than a
-              <span className="block text-[#E4A423] italic font-normal">Megastar</span>
+              {language === "te" ? "సినిమా కీర్తికంటే" : "More than a"}
+              <span className="block text-[#E4A423] italic font-normal">{language === "te" ? "మెగాస్టార్" : "Megastar"}</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 18 }}
@@ -73,7 +75,7 @@ export function MegastarSpotlight({ onNavigate }: MegastarSpotlightProps) {
                 className="px-5 py-2.5 bg-[#CC0033] text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A6002A] transition-colors"
               >
                 <Droplet className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                Register as Donor
+                {language === "te" ? "రక్తదానం చేయండి" : "Donate Blood"}
                 <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
               </motion.button>
 
@@ -84,7 +86,7 @@ export function MegastarSpotlight({ onNavigate }: MegastarSpotlightProps) {
                 className="px-5 py-2.5 bg-transparent border border-white/70 text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
               >
                 <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                Donate Funds
+                {language === "te" ? "సహకరించండి" : "Contribute"}
               </motion.button>
             </motion.div>
           </motion.div>

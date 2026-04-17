@@ -2,18 +2,16 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { AnnouncementBar } from "@/components/cct/announcement-bar"
 import { CCTNavigation } from "@/components/cct/navigation"
 import { HomeTopSlider } from "@/components/cct/home-top-slider"
-import { ImpactTicker } from "@/components/cct/impact-ticker"
 import { HowItWorksSection } from "@/components/cct/how-it-works"
 import { FeaturedCampaignsSection } from "@/components/cct/featured-campaigns"
 import { BloodInventorySnapshot } from "@/components/cct/blood-inventory-snapshot"
 import { UpcomingEventsSection } from "@/components/cct/upcoming-events"
 import { DonorWallPreview } from "@/components/cct/donor-wall"
-import { Footer } from "@/components/cct/footer"
 import { ToastProvider } from "@/components/cct/toast"
 import { PageTransition, staggerContainer, staggerItem } from "@/components/cct/page-transition"
+import { LanguageProvider } from "@/components/cct/language-context"
 
 // Other page components for navigation
 import { AboutSection } from "@/components/cct/about"
@@ -48,9 +46,6 @@ function HomePage({ onNavigate }: { onNavigate: (page: string) => void }) {
       {/* 1. Top Infinite Slider (Hero + Megastar) */}
       <HomeTopSlider onNavigate={onNavigate} />
       
-      {/* 2. Impact Ticker Strip */}
-      <ImpactTicker />
-      
       {/* 3. How It Works */}
       <HowItWorksSection />
       
@@ -58,13 +53,13 @@ function HomePage({ onNavigate }: { onNavigate: (page: string) => void }) {
       <FeaturedCampaignsSection />
       
       {/* 5. Blood Inventory Snapshot */}
-      <BloodInventorySnapshot />
+      <BloodInventorySnapshot onNavigate={onNavigate} />
       
       {/* 6. Upcoming Events */}
       <UpcomingEventsSection />
       
       {/* 7. Donor Wall Preview */}
-      <DonorWallPreview />
+      <DonorWallPreview onNavigate={onNavigate} />
       
     </>
   )
@@ -159,11 +154,29 @@ function RegisterPage({ onNavigate }: { onNavigate?: (page: string) => void }) {
 }
 
 function FindBloodPage() {
-  return <BloodRequestFlow />
+  return (
+    <motion.div 
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="min-h-screen bg-[#FFF7ED]"
+    >
+      <BloodRequestFlow />
+    </motion.div>
+  )
 }
 
 function DonatePage({ onNavigate }: { onNavigate?: (page: string) => void }) {
-  return <DonateFundsPage onNavigate={onNavigate} />
+  return (
+    <motion.div 
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="min-h-screen bg-[#FFF7ED]"
+    >
+      <DonateFundsPage onNavigate={onNavigate} />
+    </motion.div>
+  )
 }
 
 function ContactPage() {
@@ -172,7 +185,7 @@ function ContactPage() {
       variants={staggerContainer}
       initial="hidden"
       animate="visible"
-      className="pt-32 pb-20 min-h-screen"
+      className="pt-20 md:pt-24 pb-20 min-h-screen bg-white"
     >
       <ContactSection />
     </motion.div>
@@ -188,11 +201,29 @@ function ProfilePage() {
 }
 
 function GoodWorksPage() {
-  return <GoodWorksFeed />
+  return (
+    <motion.div 
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="min-h-screen bg-[#FFF7ED]"
+    >
+      <GoodWorksFeed />
+    </motion.div>
+  )
 }
 
 function ImpactPage({ onNavigate }: { onNavigate?: (page: string) => void }) {
-  return <OurImpactPage onNavigate={onNavigate} />
+  return (
+    <motion.div 
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="min-h-screen bg-[#FFF7ED]"
+    >
+      <OurImpactPage onNavigate={onNavigate} />
+    </motion.div>
+  )
 }
 
 function NotificationsPage() {
@@ -269,7 +300,6 @@ function renderPage(page: string, onNavigate: (page: string) => void) {
 
 export default function CCTHomePage() {
   const [currentPage, setCurrentPage] = useState("home")
-  const [announcementVisible, setAnnouncementVisible] = useState(true)
 
   const handleNavigate = (page: string) => {
     setCurrentPage(page)
@@ -277,23 +307,20 @@ export default function CCTHomePage() {
   }
 
   return (
-    <ToastProvider>
-      <div className="min-h-screen bg-background">
-        {announcementVisible && (
-          <AnnouncementBar onDismiss={() => setAnnouncementVisible(false)} />
-        )}
-        <CCTNavigation
-          onNavigate={handleNavigate}
-          currentPage={currentPage}
-          announcementVisible={announcementVisible}
-        />
-        <main>
-          <PageTransition pageKey={currentPage}>
-            {renderPage(currentPage, handleNavigate)}
-          </PageTransition>
-        </main>
-        <Footer />
-      </div>
-    </ToastProvider>
+    <LanguageProvider>
+      <ToastProvider>
+        <div className="min-h-screen bg-background">
+          <CCTNavigation
+            onNavigate={handleNavigate}
+            currentPage={currentPage}
+          />
+          <main>
+            <PageTransition pageKey={currentPage}>
+              {renderPage(currentPage, handleNavigate)}
+            </PageTransition>
+          </main>
+        </div>
+      </ToastProvider>
+    </LanguageProvider>
   )
 }

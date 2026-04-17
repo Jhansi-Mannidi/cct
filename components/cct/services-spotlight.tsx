@@ -1,98 +1,139 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Droplet, ArrowRight, Heart } from "lucide-react"
+import { ArrowRight } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 interface ServicesSpotlightProps {
   onNavigate?: (page: string) => void
 }
 
 export function ServicesSpotlight({ onNavigate }: ServicesSpotlightProps) {
-  return (
-    <section className="min-h-screen bg-[#EFEDE9]">
-      <div className="grid md:grid-cols-[1.05fr_1fr] min-h-screen">
-        {/* Left Red Panel */}
-        <div className="relative overflow-hidden bg-[linear-gradient(90deg,#C81924_0%,#C51C24_24%,#BE2528_48%,#B93B3B_72%,#C98C8E_88%,#EAD7D8_100%)] text-white px-8 lg:px-10 py-10 flex flex-col">
-          <div className="flex items-start justify-between text-[11px] tracking-[0.2em] uppercase font-medium opacity-90">
-            <div>
-              Chiranjeevi
-              <br />
-              Charitable Trust
-            </div>
-            <div>Blood Drive</div>
-          </div>
+  const { language } = useLanguage()
 
-          <div className="flex-1 flex items-center justify-center">
-            <div className="w-full max-w-[420px] text-center">
-              <div className="mb-10 text-xs md:text-sm tracking-[0.22em] uppercase text-white/75">
-                Blood Donation Community Legacy
-              </div>
-              <h2 className="font-sans font-black leading-[0.9] text-[3.2rem] md:text-[4rem]">
+  return (
+    <section className="h-screen min-h-[760px] overflow-hidden bg-[#F4F2EC]">
+      <div className="grid h-full md:grid-cols-[1.05fr_1fr]">
+        {/* Left Red Panel */}
+        <div className="relative overflow-hidden bg-[#CC0033] text-white">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.12),transparent_42%),radial-gradient(circle_at_92%_88%,rgba(0,0,0,0.12),transparent_46%)]" />
+
+          <div className="relative z-10 flex h-full flex-col px-8 py-10 lg:px-10">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-white/75">
+              {language === "te" ? "చిరంజీవి చారిటబుల్ ట్రస్ట్ - స్థాపితం 1997" : "Chiranjeevi Charitable Trust - Est. 1997"}
+            </p>
+
+            <div className="flex flex-1 items-center pb-10">
+              <h2 className="font-sans text-[4.1rem] leading-[0.84] font-black md:text-[5.1rem]">
                 DROP.
                 <br />
                 GIVE.
                 <br />
-                <span className="font-serif italic text-[#FFE07A] font-semibold">Live.</span>
+                <span className="font-serif text-[3.8rem] italic font-medium text-[#FFD5DF] md:text-[4.4rem]">
+                  {language === "te" ? "జీవించండి." : "Live."}
+                </span>
               </h2>
-
             </div>
-          </div>
-          <div className="absolute right-12 top-1/2 -translate-y-1/2 opacity-20">
-            <Droplet className="w-24 h-24" />
+
+            <div className="flex items-end justify-between gap-4 pb-3">
+              <div className="flex items-center gap-6">
+                <div>
+                  <p className="font-serif text-3xl font-bold">12L+</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/70">{language === "te" ? "యూనిట్లు" : "Units"}</p>
+                </div>
+                <div>
+                  <p className="font-serif text-3xl font-bold">4.7K</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/70">{language === "te" ? "ప్రాణాలు" : "Lives"}</p>
+                </div>
+                <div>
+                  <p className="font-serif text-3xl font-bold">28K</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/70">{language === "te" ? "దాతలు" : "Donors"}</p>
+                </div>
+              </div>
+
+              <div className="w-[110px]" />
+            </div>
           </div>
         </div>
 
         {/* Right Content Panel */}
-        <div className="bg-[#F5F3EF] px-8 lg:px-12 py-10 flex items-center justify-center">
+        <div className="bg-[#F4F2EC] px-8 py-10 lg:px-10">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-xl w-full"
+            transition={{ duration: 0.5 }}
+            className="h-full max-w-[640px] flex flex-col justify-between"
           >
-            <div className="inline-flex items-center rounded-md bg-[#101116] px-4 py-2 mb-8">
-              <p className="text-[10px] tracking-[0.22em] uppercase text-white font-semibold">
-                Megastar · Fan Community · Impact Platform
+            <div className="inline-flex items-center rounded-sm bg-black px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white self-start">
+              {language === "te" ? "మెగాస్టార్ - ఫ్యాన్ కమ్యూనిటీ - ఇంపాక్ట్ ప్లాట్‌ఫారమ్" : "Megastar - Fan Community - Impact Platform"}
+            </div>
+
+            <div className="mt-10">
+              <p className="font-serif text-5xl italic text-[#5B5750]">{language === "te" ? "లక్షలాది అభిమానులు" : "Millions of fans"}</p>
+              <h3 className="mt-1 font-sans text-6xl font-black leading-[0.9] text-[#111111]">{language === "te" ? "ఒకే లక్ష్యం." : "One mission."}</h3>
+              <p className="mt-1 font-serif text-5xl italic text-[#5B5750]">{language === "te" ? "అనేక జీవితాల్లో మార్పు." : "Infinite lives changed."}</p>
+
+              <p className="mt-7 max-w-xl text-sm leading-relaxed text-[#5B5750] md:text-base">
+                {language === "te"
+                  ? "హీరో కావాలంటే కేప్ అవసరం లేదు. ఒక యూనిట్ రక్తం. ఒక రూపాయి. ఒక కథ పంచుకోవడం. చిరంజీవి చారిటబుల్ ట్రస్ట్ ప్రేమను కార్యరూపంలోకి తెస్తుంది - రక్తదానం, సమాజ సేవ, శాశ్వత సేవా వారసత్వం."
+                  : "You don&apos;t need a cape to be a hero. One pint of blood.\nOne rupee. One story shared. The Chiranjeevi Charitable\nTrust turns love into action - across blood donation,\ncommunity giving, and a legacy of care."}
               </p>
+
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => onNavigate?.("donate")}
+                  className="rounded-full bg-[#0F0F0F] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white hover:bg-black/90 transition-colors"
+                >
+                  {language === "te" ? "సహకరించండి" : "Contribute"}
+                </button>
+                <button
+                  onClick={() => onNavigate?.("register")}
+                  className="rounded-full border border-[#DED9CD] bg-[#F4F2EC] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-[#2A2926] hover:bg-white transition-colors"
+                >
+                  {language === "te" ? "రక్తదానం చేయండి" : "Donate Blood"}
+                </button>
+              </div>
             </div>
 
-            <p className="font-serif italic text-3xl md:text-4xl text-[#5A5752]">Millions of fans</p>
-            <h3 className="font-sans font-black text-5xl md:text-6xl leading-[0.85] text-[#202020] mt-1">
-              ONE
-              <br />
-              MISSION.
-            </h3>
-            <p className="font-serif italic text-3xl md:text-4xl text-[#5A5752] mt-1">Infinite lives changed.</p>
-
-            <p className="mt-8 text-sm md:text-base text-[#5A5752] font-sans max-w-xl leading-relaxed">
-              You don&apos;t need a cape to be a hero. One pint of blood. One rupee. One story shared.
-              The Chiranjeevi Charitable Trust turns love into action across blood donation,
-              community giving, and generational care.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <motion.button
-                whileHover={{ scale: 1.04, y: -1, boxShadow: "0 0 36px rgba(197, 31, 31, 0.45)" }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => onNavigate?.("register")}
-                className="px-5 py-2.5 bg-[#C81924] text-white text-xs md:text-sm font-semibold rounded-full inline-flex items-center gap-2 shadow-lg shadow-red-500/25 hover:bg-[#A3131C] transition-colors"
-              >
-                <Droplet className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                Register as Donor
-                <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.04, y: -1, backgroundColor: "rgba(31,31,31,0.06)" }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => onNavigate?.("donate")}
-                className="px-5 py-2.5 bg-transparent border border-[#1F1F1F] text-[#1F1F1F] text-xs md:text-sm font-semibold rounded-full inline-flex items-center gap-2 transition-colors"
-              >
-                <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                Donate Funds
-              </motion.button>
+            <div className="pt-8">
+              <div className="rounded-2xl border border-[#E4E0D4] bg-white p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#D3224E]">
+                      {language === "te" ? "ప్రస్తుత సేవా చర్యలు" : "Live Impact Actions"}
+                    </p>
+                    <h4 className="mt-2 font-serif text-xl font-bold text-[#121212]">
+                      {language === "te" ? "జీవితాలను కాపాడే మార్పులో భాగమవ్వండి" : "Be part of life-saving change"}
+                    </h4>
+                    <p className="mt-1 text-xs text-[#69645D]">
+                      {language === "te" ? "మీరు ఎలా సహాయం చేయాలో ఎంచుకోండి: నిధులు ఇవ్వండి లేదా రక్తదానం చేయండి." : "Choose how you want to help: contribute funds or donate blood."}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onNavigate?.("donate")}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#DF1447] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.08em] text-white hover:bg-[#C0103C] transition-colors"
+                  >
+                    {language === "te" ? "సహకరించండి" : "Contribute"}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <button
+                    onClick={() => onNavigate?.("register")}
+                    className="rounded-full border border-[#D9D3C7] bg-white px-5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#27231D] hover:bg-[#F8F5EF] transition-colors"
+                  >
+                    {language === "te" ? "రక్తదానం చేయండి" : "Donate Blood"}
+                  </button>
+                  <button
+                    onClick={() => onNavigate?.("donate")}
+                    className="rounded-full border border-[#D9D3C7] bg-white px-5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#27231D] hover:bg-[#F8F5EF] transition-colors"
+                  >
+                    {language === "te" ? "సహకరించండి" : "Contribute"}
+                  </button>
+                </div>
+              </div>
             </div>
-
           </motion.div>
         </div>
       </div>

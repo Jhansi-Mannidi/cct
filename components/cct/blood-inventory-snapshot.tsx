@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import { ArrowRight } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 const bloodTypeInventory = [
   { type: "O-", units: 18, status: "critical" },
@@ -36,7 +37,12 @@ const statusConfig = {
   },
 }
 
-export function BloodInventorySnapshot() {
+interface BloodInventorySnapshotProps {
+  onNavigate?: (page: string) => void
+}
+
+export function BloodInventorySnapshot({ onNavigate }: BloodInventorySnapshotProps) {
+  const { language } = useLanguage()
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const maxUnits = Math.max(...bloodTypeInventory.map((item) => item.units))
@@ -52,27 +58,29 @@ export function BloodInventorySnapshot() {
       >
         <div className="mb-4">
           <span className="inline-block text-xs tracking-[0.18em] text-primary font-semibold uppercase">
-            Blood Bank . Live Status
+            {language === "te" ? "రక్త బ్యాంక్ . ప్రత్యక్ష స్థితి" : "Blood Bank . Live Status"}
           </span>
         </div>
 
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
           <div>
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-3 leading-tight">
-              Right Now,{" "}
-              <span className="italic font-normal text-muted-foreground">We Need...</span>
+              {language === "te" ? "ప్రస్తుతం, " : "Right Now, "}
+              <span className="italic font-normal text-muted-foreground">{language === "te" ? "మాకు అవసరం..." : "We Need..."}</span>
             </h2>
             <p className="text-base md:text-lg text-muted-foreground max-w-xl">
-              Live blood inventory across CCT partner hospitals. If your type is critical, this is
-              the moment.
+              {language === "te"
+                ? "సీసీటీ భాగస్వామ్య ఆసుపత్రుల ప్రత్యక్ష రక్త నిల్వ. మీ రక్త గ్రూప్ అత్యవసరమైతే ఇదే సమయం."
+                : "Live blood inventory across CCT partner hospitals. If your type is critical, this is the moment."}
             </p>
           </div>
           <motion.button
             whileHover={{ y: -1 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => onNavigate?.("register")}
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3 rounded-full text-sm font-semibold shadow-lg"
           >
-            Register as Donor
+            {language === "te" ? "రక్తదానం చేయండి" : "Donate Blood"}
             <ArrowRight className="w-4 h-4" />
           </motion.button>
         </div>
@@ -112,7 +120,9 @@ export function BloodInventorySnapshot() {
                 <p className="text-[11px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
                   {config.label}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">{blood.units} units</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {language === "te" ? `${blood.units} యూనిట్లు` : `${blood.units} units`}
+                </p>
               </motion.div>
             )
           })}
@@ -120,20 +130,20 @@ export function BloodInventorySnapshot() {
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
-            Updated every 6 hours from CCT partner hospitals
+            {language === "te" ? "సీసీటీ భాగస్వామ్య ఆసుపత్రుల నుండి ప్రతి 6 గంటలకు నవీకరణ" : "Updated every 6 hours from CCT partner hospitals"}
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              Critical
+              {language === "te" ? "అత్యవసరం" : "Critical"}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-              Low
+              {language === "te" ? "తక్కువ" : "Low"}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse" />
-              Sufficient
+              {language === "te" ? "సరిపడినవి" : "Sufficient"}
             </span>
           </div>
         </div>

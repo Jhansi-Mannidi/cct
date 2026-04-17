@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { Droplet, Heart, MapPin, Users } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 const impactUpdates = [
   { icon: Droplet, text: "Ravi from Vijayawada donated blood", color: "text-[#DC2626]" },
@@ -16,6 +17,7 @@ const impactUpdates = [
 ]
 
 export function ImpactTicker() {
+  const { language } = useLanguage()
   const [isPaused, setIsPaused] = useState(false)
 
   // Double the items for seamless loop
@@ -53,7 +55,18 @@ export function ImpactTicker() {
                   <Icon className="w-4 h-4" />
                 </span>
                 <span className="text-white/90 text-sm font-medium">
-                  {item.text}
+                  {language === "te"
+                    ? {
+                        "Ravi from Vijayawada donated blood": "విజయవాడకు చెందిన రవి రక్తదానం చేశారు",
+                        "Priya from Dallas contributed ₹5,000 to thalassemia fund": "డల్లాస్‌కు చెందిన ప్రియా థలసీమియా నిధికి ₹5,000 అందించారు",
+                        "Mega Drive: 352 units collected in Tirupati": "మెగా డ్రైవ్: తిరుపతిలో 352 యూనిట్లు సేకరించబడ్డాయి",
+                        "Sunita received A+ blood in Hyderabad": "హైదరాబాద్‌లో సునీతకు A+ రక్తం అందింది",
+                        "Venkat from Guntur donated O- blood": "గుంటూరుకు చెందిన వెంకట్ O- రక్తం దానం చేశారు",
+                        "Anonymous donor contributed ₹10,000": "అజ్ఞాత దాత ₹10,000 విరాళం ఇచ్చారు",
+                        "College drive: 180 units at JNTU Kakinada": "కాలేజ్ డ్రైవ్: JNTU కాకినాడలో 180 యూనిట్లు",
+                        "Kumar received B+ blood in Vizag": "విజాగ్‌లో కుమార్‌కు B+ రక్తం అందింది",
+                      }[item.text] ?? item.text
+                    : item.text}
                 </span>
                 <span className="text-white/30">•</span>
               </div>

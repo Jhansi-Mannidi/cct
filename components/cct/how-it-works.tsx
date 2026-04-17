@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion"
 import { useRef, useEffect, useState } from "react"
 import { UserPlus, Droplet, Heart, ArrowRight } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 const steps = [
   {
@@ -26,6 +27,7 @@ const steps = [
 ]
 
 export function HowItWorksSection() {
+  const { language } = useLanguage()
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [lineProgress, setLineProgress] = useState(0)
@@ -50,14 +52,15 @@ export function HowItWorksSection() {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <span className="inline-block px-4 py-1.5 bg-red-100 text-[#DC2626] text-sm font-semibold rounded-full mb-4">
-            How It Works
+            {language === "te" ? "ఇది ఎలా పనిచేస్తుంది" : "How It Works"}
           </span>
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-6">
-            Three Simple Steps to Save Lives
+            {language === "te" ? "ప్రాణాలను కాపాడేందుకు మూడు సులభమైన దశలు" : "Three Simple Steps to Save Lives"}
           </h2>
           <p className="text-lg text-[#6B7280]">
-            Becoming a blood donor is easy. Follow these simple steps and join our 
-            community of life-savers.
+            {language === "te"
+              ? "రక్తదాతగా మారడం చాలా సులభం. ఈ దశలను అనుసరించి ప్రాణరక్షకుల కుటుంబంలో చేరండి."
+              : "Becoming a blood donor is easy. Follow these simple steps and join our community of life-savers."}
           </p>
         </motion.div>
 
@@ -126,10 +129,18 @@ export function HowItWorksSection() {
 
                     {/* Content */}
                     <h3 className="font-serif text-2xl font-bold text-[#1A1A1A] mb-3">
-                      {step.title}
+                      {language === "te"
+                        ? ({ Register: "నమోదు", Donate: "దానం", "Save Lives": "ప్రాణాలు కాపాడు" }[step.title] ?? step.title)
+                        : step.title}
                     </h3>
                     <p className="text-[#6B7280] leading-relaxed">
-                      {step.description}
+                      {language === "te"
+                        ? ({
+                            "Sign up as a donor with your basic details and blood type.": "మీ ప్రాథమిక వివరాలు మరియు రక్త గ్రూపుతో దాతగా నమోదు అవ్వండి.",
+                            "Visit a nearby blood bank or join a donation camp event.": "సమీప రక్త బ్యాంక్‌ను సందర్శించండి లేదా రక్తదాన శిబిరంలో పాల్గొనండి.",
+                            "Your donation can save up to 3 lives. Track your impact.": "మీ దానం 3 ప్రాణాలను కాపాడగలదు. మీ ప్రభావాన్ని ట్రాక్ చేయండి.",
+                          }[step.description] ?? step.description)
+                        : step.description}
                     </p>
 
                     {/* Arrow (Mobile) */}

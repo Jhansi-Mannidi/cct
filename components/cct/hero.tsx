@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useInView } from "framer-motion"
 import { useRef, useState, useEffect } from "react"
 import { Droplet, ArrowRight, Heart } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 // Animated counter hook
 function useAnimatedCounter(target: number, duration: number = 2000, startOnView: boolean = true) {
@@ -48,7 +49,19 @@ function StatCounter({ value, suffix, label }: { value: number; suffix: string; 
 }
 
 // Floating Blood Drop Component
-function FloatingBloodDrop({ delay, x, size }: { delay: number; x: number; size: number }) {
+function FloatingBloodDrop({
+  delay,
+  x,
+  top,
+  size,
+  duration,
+}: {
+  delay: number
+  x: number
+  top: number
+  size: number
+  duration: number
+}) {
   return (
     <motion.div
       initial={{ y: -50, x, opacity: 0 }}
@@ -57,11 +70,11 @@ function FloatingBloodDrop({ delay, x, size }: { delay: number; x: number; size:
         opacity: [0.3, 0.6, 0.3],
       }}
       transition={{
-        y: { duration: 4 + Math.random() * 2, repeat: Infinity, ease: "easeInOut", delay },
-        opacity: { duration: 4 + Math.random() * 2, repeat: Infinity, ease: "easeInOut", delay },
+        y: { duration, repeat: Infinity, ease: "easeInOut", delay },
+        opacity: { duration, repeat: Infinity, ease: "easeInOut", delay },
       }}
       className="absolute pointer-events-none"
-      style={{ left: `${x}%`, top: `${Math.random() * 60 + 10}%` }}
+      style={{ left: `${x}%`, top: `${top}%` }}
     >
       <svg
         width={size}
@@ -78,6 +91,21 @@ function FloatingBloodDrop({ delay, x, size }: { delay: number; x: number; size:
     </motion.div>
   )
 }
+
+const FLOATING_DROPS = [
+  { x: 8, top: 18, size: 22, duration: 4.6 },
+  { x: 15, top: 62, size: 28, duration: 5.2 },
+  { x: 24, top: 36, size: 26, duration: 4.9 },
+  { x: 31, top: 72, size: 30, duration: 5.5 },
+  { x: 39, top: 21, size: 24, duration: 4.7 },
+  { x: 47, top: 56, size: 34, duration: 5.8 },
+  { x: 56, top: 30, size: 20, duration: 4.4 },
+  { x: 64, top: 67, size: 31, duration: 5.4 },
+  { x: 73, top: 24, size: 27, duration: 4.8 },
+  { x: 81, top: 59, size: 25, duration: 5.1 },
+  { x: 89, top: 40, size: 29, duration: 5.6 },
+  { x: 95, top: 74, size: 23, duration: 4.5 },
+]
 
 // Text Reveal Animation
 const textRevealVariants = {
@@ -98,6 +126,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ onNavigate }: HeroSectionProps) {
+  const { language } = useLanguage()
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -151,12 +180,14 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
       </div>
 
       {/* Floating Blood Drops */}
-      {[...Array(12)].map((_, i) => (
+      {FLOATING_DROPS.map((drop, i) => (
         <FloatingBloodDrop
           key={i}
           delay={i * 0.5}
-          x={Math.random() * 100}
-          size={20 + Math.random() * 30}
+          x={drop.x}
+          top={drop.top}
+          size={drop.size}
+          duration={drop.duration}
         />
       ))}
 
@@ -197,7 +228,9 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             transition={{ delay: 1.2, duration: 0.6 }}
             className="text-sm md:text-base lg:text-lg text-white/90 font-sans max-w-2xl mx-auto mb-10"
           >
-            Join 28,000+ donors building India&apos;s largest blood donation community.
+            {language === "te"
+              ? "భారతదేశంలో అతిపెద్ద రక్తదాన కుటుంబాన్ని నిర్మిస్తున్న 28,000+ దాతలతో మీరు కూడా చేరండి."
+              : "Join 28,000+ donors building India&apos;s largest blood donation community."}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -214,7 +247,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             className="px-5 py-2.5 bg-[#C81924] text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-[#6E0326]/55 hover:bg-[#A3131C] transition-colors"
             >
               <Droplet className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              Register as Donor
+              {language === "te" ? "రక్తదానం చేయండి" : "Donate Blood"}
               <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </motion.button>
             
@@ -225,7 +258,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
               className="px-5 py-2.5 bg-transparent border border-white/70 text-white text-xs md:text-sm font-semibold rounded-full flex items-center gap-2 hover:border-white transition-colors backdrop-blur-sm"
             >
               <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              Donate Funds
+              {language === "te" ? "సహకరించండి" : "Contribute"}
             </motion.button>
           </motion.div>
 

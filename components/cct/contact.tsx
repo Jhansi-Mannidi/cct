@@ -5,6 +5,7 @@ import { useRef, useState } from "react"
 import { MapPin, Phone, Mail, Clock, Send, Facebook, Twitter, Instagram, Youtube } from "lucide-react"
 import { CCTButton } from "./button"
 import { CCTInput, CCTTextarea } from "./input"
+import { useToast } from "./toast"
 
 const contactInfo = [
   {
@@ -40,60 +41,90 @@ export function ContactSection() {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    subject: "",
+    message: "",
+  })
+  const { addToast } = useToast()
+  const mapQuery = "Chiranjeevi Charitable Trust Jubilee Hills Hyderabad Telangana 500033"
+  const embeddedMapUrl = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     // Simulate form submission
-    setTimeout(() => setIsSubmitting(false), 2000)
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        subject: "",
+        message: "",
+      })
+      addToast(
+        "success",
+        "Message sent successfully! 🎉",
+        "Confetti time! 🥳 We received your message and will get back to you soon."
+      )
+    }, 2000)
   }
 
   return (
-    <section id="contact" className="py-24 bg-white">
+    <section id="contact" className="pt-6 md:pt-8 pb-14 md:pb-16 bg-white">
       <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-10 md:mb-12"
         >
-          <span className="inline-block px-4 py-1.5 bg-[#1E3A5F]/10 text-[#1E3A5F] text-sm font-semibold rounded-full mb-4">
+         
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
             Get in Touch
-          </span>
-          <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-6">
-            Contact Us
           </h2>
-          <p className="text-lg text-[#6B7280]">
+          <p className="text-base md:text-lg text-[#6B7280]">
             Have questions or want to get involved? We would love to hear from you. 
             Reach out to us through any of the channels below.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-10">
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="bg-[#FFF7ED] rounded-3xl p-8">
-              <h3 className="font-serif text-2xl font-bold text-[#1A1A1A] mb-6">
+            <div className="bg-[#FFF7ED] rounded-3xl p-6 md:p-7">
+              <h3 className="font-serif text-xl md:text-2xl font-bold text-[#1A1A1A] mb-5">
                 Send us a Message
               </h3>
               
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                 <div className="grid md:grid-cols-2 gap-4">
                   <CCTInput 
                     label="Full Name" 
                     name="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                     required
+                    hideRequiredIndicator
+                    fieldClassName="py-2.5 pt-5"
                   />
                   <CCTInput 
                     label="Phone Number" 
                     name="phone"
                     type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
                     required
+                    hideRequiredIndicator
+                    fieldClassName="py-2.5 pt-5"
                   />
                 </div>
                 
@@ -101,19 +132,31 @@ export function ContactSection() {
                   label="Email Address" 
                   name="email"
                   type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                   required
+                  hideRequiredIndicator
+                  fieldClassName="py-2.5 pt-5"
                 />
                 
                 <CCTInput 
                   label="Subject" 
                   name="subject"
+                  value={formData.subject}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
                   required
+                  hideRequiredIndicator
+                  fieldClassName="py-2.5 pt-5"
                 />
                 
                 <CCTTextarea 
                   label="Your Message" 
                   name="message"
+                  value={formData.message}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
                   required
+                  hideRequiredIndicator
+                  fieldClassName="py-2.5 pt-5 min-h-[102px]"
                 />
                 
                 <CCTButton 
@@ -135,7 +178,7 @@ export function ContactSection() {
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="space-y-6"
+            className="space-y-2.5 md:space-y-3"
           >
             {contactInfo.map((info, index) => (
               <motion.div
@@ -144,14 +187,14 @@ export function ContactSection() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
                 whileHover={{ x: 4, transition: { duration: 0.2 } }}
-                className="flex items-start gap-4 p-4 rounded-2xl hover:bg-gray-50 transition-colors"
+                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors"
               >
-                <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <info.icon className="w-6 h-6 text-[#DC2626]" />
+                <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <info.icon className="w-5 h-5 text-[#DC2626]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[#1A1A1A] mb-1">{info.title}</h4>
-                  <p className="text-[#6B7280]">{info.content}</p>
+                  <h4 className="font-semibold text-[#1A1A1A] mb-0">{info.title}</h4>
+                  <p className="text-sm text-[#6B7280]">{info.content}</p>
                 </div>
               </motion.div>
             ))}
@@ -161,39 +204,40 @@ export function ContactSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.8 }}
-              className="pt-6 border-t border-gray-100"
+              className="pt-3 border-t border-gray-100"
             >
-              <h4 className="font-semibold text-[#1A1A1A] mb-4">Follow Us</h4>
-              <div className="flex gap-3">
+              <h4 className="font-semibold text-[#1A1A1A] mb-3">Follow Us</h4>
+              <div className="flex gap-2.5">
                 {socialLinks.map((social) => (
                   <motion.a
                     key={social.label}
                     href={social.href}
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-[#6B7280] hover:bg-[#DC2626] hover:text-white transition-colors"
+                    className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center text-[#6B7280] hover:bg-[#DC2626] hover:text-white transition-colors"
                     aria-label={social.label}
                   >
-                    <social.icon className="w-5 h-5" />
+                    <social.icon className="w-4.5 h-4.5" />
                   </motion.a>
                 ))}
               </div>
             </motion.div>
 
-            {/* Map placeholder */}
+            {/* Live Map */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.9 }}
-              className="mt-8 h-64 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden relative"
+              className="mt-3 h-60 rounded-2xl overflow-hidden relative border border-gray-200 shadow-lg shadow-black/5"
             >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="w-12 h-12 text-[#DC2626] mx-auto mb-2" />
-                  <p className="text-[#6B7280] font-medium">Hyderabad, Telangana</p>
-                  <p className="text-sm text-[#6B7280]">View on Google Maps</p>
-                </div>
-              </div>
+              <iframe
+                title="CCT Blood Bank Location Map"
+                src={embeddedMapUrl}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0 w-full h-full border-0"
+              />
+
             </motion.div>
           </motion.div>
         </div>

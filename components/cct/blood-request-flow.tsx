@@ -235,7 +235,7 @@ export function BloodRequestFlow() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FFF7ED] to-white pt-28 pb-20">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           {/* STEP 1 - BLOOD TYPE & URGENCY */}
           {step === 1 && (
@@ -246,189 +246,223 @@ export function BloodRequestFlow() {
               animate="animate"
               exit="exit"
               transition={{ duration: 0.3 }}
+              className="relative"
             >
+              <motion.div
+                className="absolute -top-10 left-1/4 w-56 h-56 rounded-full bg-[#DC2626]/8 blur-3xl pointer-events-none"
+                animate={{ scale: [1, 1.08, 1], opacity: [0.35, 0.55, 0.35] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="absolute top-24 right-10 w-44 h-44 rounded-full bg-[#F59E0B]/10 blur-3xl pointer-events-none"
+                animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.45, 0.25] }}
+                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
+              />
+
               {/* Header */}
-              <div className="text-center mb-8">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", damping: 10 }}
-                  className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-4"
+              <div className="text-center mb-8 relative z-10">
+                <motion.h1
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.1 }}
+                  className="font-serif text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2"
                 >
-                  <Heart className="w-10 h-10 text-[#DC2626]" />
-                  <Droplet className="w-6 h-6 text-[#DC2626] -ml-2" />
-                </motion.div>
-                <h1 className="font-serif text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
                   Need Blood?
-                </h1>
-                <p className="text-[#6B7280]">
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  className="text-[#6B7280] text-sm md:text-base"
+                >
                   We&apos;ll help you find blood quickly
-                </p>
+                </motion.p>
               </div>
 
-              {/* Blood Type Selector */}
-              <div className="bg-white rounded-3xl shadow-xl shadow-black/5 p-6 md:p-8 mb-6">
-                <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
-                  <Droplet className="w-5 h-5 text-[#DC2626]" />
-                  Select Blood Type
-                </h2>
-                
-                <div className="grid grid-cols-4 gap-3 mb-4">
-                  {bloodTypes.map((type) => (
-                    <motion.button
-                      key={type}
-                      onClick={() => setSelectedBloodType(type)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`
-                        relative w-full aspect-square rounded-full flex items-center justify-center
-                        text-lg font-bold transition-all duration-200
-                        ${selectedBloodType === type 
-                          ? "bg-[#DC2626] text-white ring-4 ring-red-300 scale-110" 
-                          : "bg-gray-100 text-[#1A1A1A] hover:bg-gray-200"
-                        }
-                      `}
-                      style={{ minHeight: "60px" }}
-                    >
-                      {selectedBloodType === type && (
-                        <motion.div
-                          layoutId="blood-select"
-                          className="absolute inset-0 bg-[#DC2626] rounded-full -z-10"
-                          transition={{ type: "spring", damping: 20 }}
-                        />
-                      )}
-                      {type}
-                    </motion.button>
-                  ))}
-                </div>
-
-                {/* Compatible donors info */}
-                <AnimatePresence>
-                  {selectedBloodType && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="bg-blue-50 rounded-xl p-4 mt-4"
-                    >
-                      <p className="text-sm text-[#1E3A5F]">
-                        <span className="font-medium">Compatible donors: </span>
-                        {bloodCompatibility[selectedBloodType]?.join(", ")}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Urgency Selector */}
-              <div className="bg-white rounded-3xl shadow-xl shadow-black/5 p-6 md:p-8 mb-6">
-                <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-[#DC2626]" />
-                  How Urgent?
-                </h2>
-                
-                <div className="space-y-3">
-                  {[
-                    { id: "24h", label: "Within 24 Hours", icon: AlertTriangle, color: "red", desc: "Emergency requirement" },
-                    { id: "3d", label: "Within 3 Days", icon: Calendar, color: "amber", desc: "Planned procedure" },
-                    { id: "1w", label: "Within a Week", icon: CalendarDays, color: "green", desc: "Non-urgent need" }
-                  ].map((urgency) => (
-                    <motion.button
-                      key={urgency.id}
-                      onClick={() => setSelectedUrgency(urgency.id)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`
-                        w-full p-4 rounded-2xl border-2 text-left transition-all duration-200 relative overflow-hidden
-                        ${selectedUrgency === urgency.id 
-                          ? urgency.color === "red" 
-                            ? "border-red-500 bg-red-50" 
-                            : urgency.color === "amber"
-                              ? "border-amber-500 bg-amber-50"
-                              : "border-green-500 bg-green-50"
-                          : "border-gray-200 bg-white hover:border-gray-300"
-                        }
-                      `}
-                    >
-                      {/* Pulsing border for 24h option when selected */}
-                      {selectedUrgency === urgency.id && urgency.id === "24h" && (
-                        <motion.div
-                          className="absolute inset-0 border-2 border-red-500 rounded-2xl"
-                          animate={{ opacity: [1, 0.5, 1] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                        />
-                      )}
-                      
-                      <div className="flex items-center gap-4">
-                        <div className={`
-                          w-14 h-14 rounded-xl flex items-center justify-center
-                          ${urgency.color === "red" 
-                            ? "bg-red-100 text-red-600" 
-                            : urgency.color === "amber"
-                              ? "bg-amber-100 text-amber-600"
-                              : "bg-green-100 text-green-600"
+              <div className="grid lg:grid-cols-2 gap-5 mb-5 relative z-10">
+                {/* Blood Type Selector */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.15 }}
+                  whileHover={{ y: -2 }}
+                  className="bg-white rounded-2xl border border-[#ECE7DD] shadow-sm p-5 md:p-6"
+                >
+                  <h2 className="text-base font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
+                    <Droplet className="w-4 h-4 text-[#DC2626]" />
+                    Select Blood Type
+                  </h2>
+                  
+                  <div className="grid grid-cols-4 gap-2.5 mb-4">
+                    {bloodTypes.map((type) => (
+                      <motion.button
+                        key={type}
+                        onClick={() => setSelectedBloodType(type)}
+                        whileHover={{ scale: 1.04, y: -1 }}
+                        whileTap={{ scale: 0.95 }}
+                        animate={selectedBloodType === type ? { scale: [1, 1.06, 1.03] } : { scale: 1 }}
+                        transition={{ duration: 0.25 }}
+                        className={`
+                          relative w-full h-14 rounded-xl flex items-center justify-center
+                          text-base font-semibold transition-all duration-200 border
+                          ${selectedBloodType === type 
+                            ? "bg-[#DC2626] text-white border-[#DC2626] shadow-md shadow-red-200" 
+                            : "bg-[#F9F7F2] border-[#E9E3D8] text-[#1A1A1A] hover:bg-[#F3EEE4]"
                           }
-                        `}>
-                          <urgency.icon className="w-7 h-7" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-semibold text-[#1A1A1A]">{urgency.label}</p>
-                          <p className="text-sm text-[#6B7280]">{urgency.desc}</p>
-                        </div>
-                        {selectedUrgency === urgency.id && (
-                          <motion.div
+                        `}
+                      >
+                        {selectedBloodType === type && (
+                          <motion.span
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center"
-                          >
-                            <Check className="w-4 h-4 text-white" />
-                          </motion.div>
+                            className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-white/20 border border-white/50"
+                          />
                         )}
-                      </div>
-                    </motion.button>
-                  ))}
-                </div>
+                        {type}
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  {/* Compatible donors info */}
+                  <AnimatePresence>
+                    {selectedBloodType && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="bg-[#F3F8FF] border border-[#DCE8FA] rounded-xl p-3.5 mt-4"
+                      >
+                        <p className="text-sm text-[#1E3A5F]">
+                          <span className="font-medium">Compatible donors: </span>
+                          {bloodCompatibility[selectedBloodType]?.join(", ")}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* Urgency Selector */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.25 }}
+                  whileHover={{ y: -2 }}
+                  className="bg-white rounded-2xl border border-[#ECE7DD] shadow-sm p-5 md:p-6"
+                >
+                  <h2 className="text-base font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[#DC2626]" />
+                    How Urgent?
+                  </h2>
+                  
+                  <div className="space-y-3">
+                    {[
+                      { id: "24h", label: "Within 24 Hours", icon: AlertTriangle, color: "red", desc: "Emergency requirement" },
+                      { id: "3d", label: "Within 3 Days", icon: Calendar, color: "amber", desc: "Planned procedure" },
+                      { id: "1w", label: "Within a Week", icon: CalendarDays, color: "green", desc: "Non-urgent need" }
+                    ].map((urgency) => (
+                      <motion.button
+                        key={urgency.id}
+                        onClick={() => setSelectedUrgency(urgency.id)}
+                        whileHover={{ scale: 1.01, x: 2 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={`
+                          w-full p-3.5 rounded-xl border text-left transition-all duration-200 relative overflow-hidden
+                          ${selectedUrgency === urgency.id 
+                            ? urgency.color === "red" 
+                              ? "border-red-300 bg-red-50" 
+                              : urgency.color === "amber"
+                                ? "border-amber-300 bg-amber-50"
+                                : "border-green-300 bg-green-50"
+                            : "border-[#E8E2D7] bg-white hover:border-[#D8D0C2]"
+                          }
+                        `}
+                      >
+                        {/* Pulsing border for 24h option when selected */}
+                        {selectedUrgency === urgency.id && urgency.id === "24h" && (
+                          <motion.div
+                            className="absolute inset-0 border border-red-300 rounded-xl"
+                            animate={{ opacity: [1, 0.5, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          />
+                        )}
+                        
+                        <div className="flex items-center gap-4">
+                          <div className={`
+                            w-11 h-11 rounded-lg flex items-center justify-center
+                            ${urgency.color === "red" 
+                              ? "bg-red-100 text-red-600" 
+                              : urgency.color === "amber"
+                                ? "bg-amber-100 text-amber-600"
+                                : "bg-green-100 text-green-600"
+                            }
+                          `}>
+                            <urgency.icon className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-semibold text-[#1A1A1A] text-[15px]">{urgency.label}</p>
+                            <p className="text-xs text-[#6B7280]">{urgency.desc}</p>
+                          </div>
+                          {selectedUrgency === urgency.id && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              className="w-5 h-5 bg-[#16A34A] rounded-full flex items-center justify-center"
+                            >
+                              <Check className="w-3.5 h-3.5 text-white" />
+                            </motion.div>
+                          )}
+                        </div>
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
 
               {/* Units Needed */}
-              <div className="bg-white rounded-3xl shadow-xl shadow-black/5 p-6 md:p-8 mb-6">
-                <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
-                  <Droplet className="w-5 h-5 text-[#DC2626]" />
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.32 }}
+                className="bg-white rounded-2xl border border-[#ECE7DD] shadow-sm p-5 md:p-6 mb-6 relative z-10"
+              >
+                <h2 className="text-base font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
+                  <Droplet className="w-4 h-4 text-[#DC2626]" />
                   Units Needed
                 </h2>
                 
-                <div className="flex items-center justify-center gap-6">
+                <div className="flex items-center justify-center gap-5">
                   <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={units > 1 ? { scale: 1.05 } : undefined}
+                    whileTap={units > 1 ? { scale: 0.9 } : undefined}
+                    disabled={units <= 1}
                     onClick={() => setUnits(Math.max(1, units - 1))}
-                    className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center text-[#1A1A1A] hover:bg-gray-200 transition-colors"
+                    className="w-11 h-11 rounded-full bg-[#F4F4F5] border border-[#E4E4E7] flex items-center justify-center text-[#1A1A1A] hover:bg-[#EDEDF0] transition-colors disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-[#F4F4F5]"
                   >
-                    <Minus className="w-6 h-6" />
+                    <Minus className="w-5 h-5" />
                   </motion.button>
                   
                   <motion.span
                     key={units}
                     initial={{ scale: 1.2 }}
                     animate={{ scale: 1 }}
-                    className="text-5xl font-bold text-[#DC2626] w-20 text-center"
+                    className="text-4xl font-bold text-[#DC2626] w-16 text-center"
                   >
                     {units}
                   </motion.span>
                   
                   <motion.button
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setUnits(Math.min(10, units + 1))}
-                    className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center text-[#1A1A1A] hover:bg-gray-200 transition-colors"
+                    className="w-11 h-11 rounded-full bg-[#F4F4F5] border border-[#E4E4E7] flex items-center justify-center text-[#1A1A1A] hover:bg-[#EDEDF0] transition-colors"
                   >
-                    <Plus className="w-6 h-6" />
+                    <Plus className="w-5 h-5" />
                   </motion.button>
                 </div>
-                <p className="text-center text-sm text-[#6B7280] mt-2">
+                <p className="text-center text-xs text-[#6B7280] mt-2">
                   1 unit = ~450ml of blood
                 </p>
-              </div>
+              </motion.div>
 
               {/* CTA Button */}
               <motion.button
@@ -436,11 +470,17 @@ export function BloodRequestFlow() {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleNext}
                 disabled={!selectedBloodType || !selectedUrgency}
+                animate={
+                  selectedBloodType && selectedUrgency
+                    ? { boxShadow: ["0 6px 18px rgba(201,29,46,0.18)", "0 10px 24px rgba(201,29,46,0.26)", "0 6px 18px rgba(201,29,46,0.18)"] }
+                    : {}
+                }
+                transition={{ duration: 1.6, repeat: selectedBloodType && selectedUrgency ? Infinity : 0 }}
                 className={`
-                  w-full py-5 rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-all
+                  w-full py-4 rounded-xl font-semibold text-base flex items-center justify-center gap-2 transition-all relative z-10
                   ${selectedBloodType && selectedUrgency
-                    ? "bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white shadow-lg shadow-red-500/30"
-                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    ? "bg-[#C91D2E] text-white shadow-md shadow-red-200 hover:bg-[#AF1726]"
+                    : "bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed"
                   }
                 `}
               >

@@ -23,7 +23,7 @@ export function AnnouncementBar({ onDismiss }: AnnouncementBarProps) {
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="bg-[#DC2626] text-white overflow-hidden relative z-[60]"
+          className="bg-black text-white overflow-hidden relative z-40 mt-16"
         >
           <div className="relative h-10 flex items-center">
             {/* Marquee Container */}

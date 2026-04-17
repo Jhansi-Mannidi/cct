@@ -8,15 +8,11 @@ import {
   ArrowRight, 
   Check, 
   Camera,
-  Bell,
-  MessageSquare,
   Mail,
   User,
   MapPin,
   Calendar,
   Loader2,
-  AlertTriangle,
-  CheckCircle2,
   ChevronDown
 } from "lucide-react"
 
@@ -60,7 +56,7 @@ const staggerItem = {
 // Progress Indicator Component
 function ProgressIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
   return (
-    <div className="flex items-center justify-center gap-0 mb-8">
+    <div className="flex items-center justify-center gap-0 mb-5">
       {Array.from({ length: totalSteps }).map((_, index) => (
         <div key={index} className="flex items-center">
           {/* Step dot */}
@@ -309,7 +305,7 @@ function PhoneVerificationStep({
           >
             <div className="relative">
               <div className="flex items-center border-2 border-gray-200 rounded-xl focus-within:border-[#DC2626] focus-within:ring-2 focus-within:ring-[#DC2626]/20 transition-all overflow-hidden bg-white">
-                <div className="flex items-center gap-2 px-4 py-4 bg-gray-50 border-r border-gray-200">
+                <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 border-r border-gray-200">
                   <span className="text-xl">🇮🇳</span>
                   <span className="font-medium text-[#374151]">+91</span>
                 </div>
@@ -321,7 +317,7 @@ function PhoneVerificationStep({
                     setPhoneNumber(value)
                   }}
                   placeholder="Enter your phone number"
-                  className="flex-1 px-4 py-4 outline-none text-lg"
+                  className="flex-1 px-4 py-3 outline-none text-base"
                 />
               </div>
             </div>
@@ -374,7 +370,7 @@ function PhoneVerificationStep({
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: index * 0.05 }}
-                    className={`w-12 h-14 text-center text-xl font-bold rounded-xl border-2 transition-all outline-none ${
+                    className={`w-10 h-12 text-center text-lg font-bold rounded-xl border-2 transition-all outline-none ${
                       otp[index]
                         ? "border-[#DC2626] bg-red-50"
                         : "border-gray-200 bg-white focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20"
@@ -452,7 +448,7 @@ function PersonalDetailsStep({
       animate="visible"
       className="space-y-6"
     >
-      <motion.div variants={staggerItem} className="text-center mb-8">
+      <motion.div variants={staggerItem} className="text-center mb-5">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
           Tell us about yourself
         </h2>
@@ -467,15 +463,15 @@ function PersonalDetailsStep({
           type="text"
           value={formData.fullName}
           onChange={(e) => setFormData({ fullName: e.target.value })}
-          className="peer w-full px-4 py-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
+          className="peer w-full px-4 py-2.5 pt-4 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
           placeholder=" "
         />
         <label className={`absolute left-4 transition-all duration-200 pointer-events-none ${
           formData.fullName 
-            ? "top-2 text-xs text-[#DC2626] font-medium" 
-            : "top-4 text-[#6B7280]"
+            ? "top-1.5 text-xs text-[#DC2626] font-medium"
+            : "top-3 text-[#6B7280]"
         }`}>
-          Full Name
+          Full Name <span className="text-[#DC2626]">*</span>
         </label>
       </motion.div>
 
@@ -485,16 +481,16 @@ function PersonalDetailsStep({
           type="date"
           value={formData.dob}
           onChange={(e) => setFormData({ dob: e.target.value })}
-          className="peer w-full px-4 py-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
+          className="peer w-full px-4 py-2.5 pt-4 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
         />
         <label className="absolute left-4 top-2 text-xs text-[#DC2626] font-medium pointer-events-none">
-          Date of Birth
+          Date of Birth <span className="text-[#DC2626]">*</span>
         </label>
       </motion.div>
 
       {/* Gender */}
       <motion.div variants={staggerItem}>
-        <label className="block text-sm font-medium text-[#374151] mb-3">Gender</label>
+        <label className="block text-sm font-medium text-[#374151] mb-3">Gender <span className="text-[#DC2626]">*</span></label>
         <div className="flex gap-3">
           {genders.map((gender) => (
             <motion.button
@@ -524,8 +520,8 @@ function PersonalDetailsStep({
 
       {/* Blood Type */}
       <motion.div variants={staggerItem}>
-        <label className="block text-sm font-medium text-[#374151] mb-3">Blood Type</label>
-        <div className="grid grid-cols-4 gap-3">
+        <label className="block text-sm font-medium text-[#374151] mb-3">Blood Type <span className="text-[#DC2626]">*</span></label>
+        <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
           {bloodTypes.map((type) => (
             <motion.button
               key={type}
@@ -535,7 +531,7 @@ function PersonalDetailsStep({
               animate={{
                 scale: formData.bloodType === type ? 1.1 : 1,
               }}
-              className={`relative w-full aspect-square rounded-full flex items-center justify-center font-bold text-lg transition-all ${
+              className={`relative w-full aspect-square rounded-full flex items-center justify-center font-bold text-base transition-all ${
                 formData.bloodType === type
                   ? "bg-[#DC2626] text-white shadow-lg shadow-red-500/30"
                   : "bg-white border-2 border-gray-200 text-[#374151] hover:border-[#DC2626]"
@@ -560,23 +556,22 @@ function PersonalDetailsStep({
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ email: e.target.value })}
-          className="peer w-full px-4 py-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
+          className="peer w-full px-4 py-2.5 pt-4 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
           placeholder=" "
         />
         <label className={`absolute left-4 transition-all duration-200 pointer-events-none ${
           formData.email 
-            ? "top-2 text-xs text-[#DC2626] font-medium" 
-            : "top-4 text-[#6B7280]"
+            ? "top-1.5 text-xs text-[#DC2626] font-medium"
+            : "top-3 text-[#6B7280]"
         }`}>
           Email (Optional)
         </label>
-        <p className="text-xs text-[#9CA3AF] mt-1.5 ml-1">For 80G certificates</p>
       </motion.div>
     </motion.div>
   )
 }
 
-// Step 3: Location & Screening
+// Step 3: Location
 function LocationScreeningStep({
   formData,
   setFormData,
@@ -586,38 +581,11 @@ function LocationScreeningStep({
     district: string
     state: string
     pinCode: string
-    screening: {
-      weight: boolean | null
-      surgery: boolean | null
-      chronic: boolean | null
-      medication: boolean | null
-    }
   }
   setFormData: (data: Partial<typeof formData>) => void
 }) {
   const cities = ["Hyderabad", "Vijayawada", "Visakhapatnam", "Tirupati", "Guntur", "Warangal", "Kakinada", "Nellore"]
   const districts = ["Hyderabad", "Krishna", "Visakhapatnam", "Chittoor", "Guntur", "Warangal", "East Godavari", "Nellore"]
-
-  const screeningQuestions = [
-    { key: "weight", question: "Do you weigh more than 45 kg?", goodAnswer: true },
-    { key: "surgery", question: "Have you had any surgery in the last 6 months?", goodAnswer: false },
-    { key: "chronic", question: "Do you have any chronic medical conditions?", goodAnswer: false },
-    { key: "medication", question: "Are you currently on any blood-thinning medication?", goodAnswer: false },
-  ] as const
-
-  const isEligible = 
-    formData.screening.weight === true &&
-    formData.screening.surgery === false &&
-    formData.screening.chronic === false &&
-    formData.screening.medication === false
-
-  const hasAnsweredAll = Object.values(formData.screening).every(v => v !== null)
-
-  const isWarning = (key: keyof typeof formData.screening, value: boolean | null) => {
-    const question = screeningQuestions.find(q => q.key === key)
-    if (!question || value === null) return false
-    return value !== question.goodAnswer
-  }
 
   return (
     <motion.div
@@ -626,9 +594,9 @@ function LocationScreeningStep({
       animate="visible"
       className="space-y-6"
     >
-      <motion.div variants={staggerItem} className="text-center mb-8">
+      <motion.div variants={staggerItem} className="text-center mb-5">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
-          Location & Health Check
+          Location Details
         </h2>
         <p className="text-[#6B7280]">
           Help us find donation opportunities near you
@@ -637,7 +605,7 @@ function LocationScreeningStep({
 
       {/* State */}
       <motion.div variants={staggerItem}>
-        <label className="block text-sm font-medium text-[#374151] mb-3">State</label>
+        <label className="block text-sm font-medium text-[#374151] mb-3">State <span className="text-[#DC2626]">*</span></label>
         <div className="flex gap-3">
           {["AP", "TS", "Other"].map((state) => (
             <motion.button
@@ -664,9 +632,9 @@ function LocationScreeningStep({
           <select
             value={formData.city}
             onChange={(e) => setFormData({ city: e.target.value })}
-            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white appearance-none"
+            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white appearance-none"
           >
-            <option value="">Select City</option>
+            <option value="">Select City *</option>
             {cities.map((city) => (
               <option key={city} value={city}>{city}</option>
             ))}
@@ -679,7 +647,7 @@ function LocationScreeningStep({
           <select
             value={formData.district}
             onChange={(e) => setFormData({ district: e.target.value })}
-            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white appearance-none"
+            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white appearance-none"
           >
             <option value="">Select District</option>
             {districts.map((district) => (
@@ -699,120 +667,18 @@ function LocationScreeningStep({
             const value = e.target.value.replace(/\D/g, "").slice(0, 6)
             setFormData({ pinCode: value })
           }}
-          className="peer w-full px-4 py-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
+          className="peer w-full px-4 py-2.5 pt-4 border-2 border-gray-200 rounded-xl focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 outline-none transition-all bg-white"
           placeholder=" "
         />
         <label className={`absolute left-4 transition-all duration-200 pointer-events-none ${
           formData.pinCode 
-            ? "top-2 text-xs text-[#DC2626] font-medium" 
-            : "top-4 text-[#6B7280]"
+            ? "top-1.5 text-xs text-[#DC2626] font-medium"
+            : "top-3 text-[#6B7280]"
         }`}>
           Pin Code
         </label>
       </motion.div>
 
-      {/* Health Screening */}
-      <motion.div variants={staggerItem}>
-        <label className="block text-sm font-medium text-[#374151] mb-3">Health Screening</label>
-        <div className="space-y-3">
-          {screeningQuestions.map((q, index) => {
-            const value = formData.screening[q.key]
-            const showWarning = isWarning(q.key, value)
-            
-            return (
-              <motion.div
-                key={q.key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`p-4 rounded-xl border-2 transition-all ${
-                  showWarning 
-                    ? "border-amber-400 bg-amber-50" 
-                    : value !== null 
-                    ? "border-green-400 bg-green-50" 
-                    : "border-gray-200 bg-white"
-                }`}
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    {showWarning && (
-                      <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0" />
-                    )}
-                    <span className={`text-sm ${showWarning ? "text-amber-800" : "text-[#374151]"}`}>
-                      {q.question}
-                    </span>
-                  </div>
-                  <div className="flex gap-2 flex-shrink-0">
-                    <button
-                      onClick={() => setFormData({ 
-                        screening: { ...formData.screening, [q.key]: true } 
-                      })}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                        value === true
-                          ? "bg-[#DC2626] text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                      }`}
-                    >
-                      Yes
-                    </button>
-                    <button
-                      onClick={() => setFormData({ 
-                        screening: { ...formData.screening, [q.key]: false } 
-                      })}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                        value === false
-                          ? "bg-[#DC2626] text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                      }`}
-                    >
-                      No
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
-
-      {/* Eligibility Result */}
-      <AnimatePresence>
-        {hasAnsweredAll && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: "auto" }}
-            exit={{ opacity: 0, y: -20, height: 0 }}
-            className={`p-4 rounded-xl ${
-              isEligible 
-                ? "bg-green-100 border-2 border-green-400" 
-                : "bg-amber-100 border-2 border-amber-400"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              {isEligible ? (
-                <>
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
-                  <span className="font-medium text-green-800">
-                    {"You're eligible to donate! 🎉"}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <AlertTriangle className="w-6 h-6 text-amber-600" />
-                  <div>
-                    <span className="font-medium text-amber-800 block">
-                      You may not be eligible right now
-                    </span>
-                    <span className="text-sm text-amber-700">
-                      Please consult with a medical professional before donating.
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   )
 }
@@ -821,8 +687,6 @@ function LocationScreeningStep({
 function ConfirmationStep({
   formData,
   phoneNumber,
-  preferences,
-  setPreferences,
   onSubmit,
 }: {
   formData: {
@@ -835,14 +699,6 @@ function ConfirmationStep({
     state: string
   }
   phoneNumber: string
-  preferences: {
-    push: boolean
-    sms: boolean
-    email: boolean
-    whatsapp: boolean
-    showOnWall: boolean
-  }
-  setPreferences: (data: Partial<typeof preferences>) => void
   onSubmit: () => void
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -884,7 +740,7 @@ function ConfirmationStep({
       animate="visible"
       className="space-y-6"
     >
-      <motion.div variants={staggerItem} className="text-center mb-8">
+      <motion.div variants={staggerItem} className="text-center mb-5">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
           Almost there!
         </h2>
@@ -956,64 +812,6 @@ function ConfirmationStep({
         </div>
       </motion.div>
 
-      {/* Notification Preferences */}
-      <motion.div variants={staggerItem} className="bg-white rounded-2xl border-2 border-gray-100 p-6">
-        <h3 className="font-semibold text-[#1A1A1A] mb-4">Notification Preferences</h3>
-        <div className="space-y-4">
-          {[
-            { key: "push", label: "Push Notifications", icon: Bell },
-            { key: "sms", label: "SMS", icon: MessageSquare },
-            { key: "email", label: "Email", icon: Mail },
-            { key: "whatsapp", label: "WhatsApp", icon: MessageSquare },
-          ].map((item) => (
-            <div key={item.key} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <item.icon className="w-5 h-5 text-[#6B7280]" />
-                <span className="text-[#374151]">{item.label}</span>
-              </div>
-              <button
-                onClick={() => setPreferences({ 
-                  [item.key]: !preferences[item.key as keyof typeof preferences] 
-                })}
-                className={`w-12 h-6 rounded-full transition-all relative ${
-                  preferences[item.key as keyof typeof preferences]
-                    ? "bg-[#DC2626]"
-                    : "bg-gray-200"
-                }`}
-              >
-                <motion.div
-                  animate={{
-                    x: preferences[item.key as keyof typeof preferences] ? 24 : 2,
-                  }}
-                  className="absolute top-1 w-4 h-4 rounded-full bg-white shadow"
-                />
-              </button>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Donor Wall Visibility */}
-      <motion.div variants={staggerItem} className="bg-white rounded-2xl border-2 border-gray-100 p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-semibold text-[#1A1A1A]">Donor Wall Visibility</h3>
-            <p className="text-sm text-[#6B7280]">Show my name on the Donor Wall</p>
-          </div>
-          <button
-            onClick={() => setPreferences({ showOnWall: !preferences.showOnWall })}
-            className={`w-12 h-6 rounded-full transition-all relative ${
-              preferences.showOnWall ? "bg-[#DC2626]" : "bg-gray-200"
-            }`}
-          >
-            <motion.div
-              animate={{ x: preferences.showOnWall ? 24 : 2 }}
-              className="absolute top-1 w-4 h-4 rounded-full bg-white shadow"
-            />
-          </button>
-        </div>
-      </motion.div>
-
       {/* Submit Button */}
       <motion.button
         variants={staggerItem}
@@ -1040,7 +838,15 @@ function ConfirmationStep({
 }
 
 // Success Screen
-function SuccessScreen({ name, onCTA }: { name: string; onCTA: (action: string) => void }) {
+function SuccessScreen({
+  name,
+  onCTA,
+  onBack,
+}: {
+  name: string
+  onCTA: (action: string) => void
+  onBack: () => void
+}) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -1099,8 +905,17 @@ function SuccessScreen({ name, onCTA }: { name: string; onCTA: (action: string) 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
-        className="flex flex-col sm:flex-row gap-4 mt-8 w-full max-w-md"
+        className="flex flex-col sm:flex-row gap-4 mt-8 w-full max-w-2xl"
       >
+        <motion.button
+          onClick={onBack}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="px-6 py-4 border border-[#D8CCBE] bg-white text-[#1A1A1A] font-semibold rounded-xl shadow-sm flex items-center justify-center gap-2"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Back
+        </motion.button>
         <motion.button
           onClick={() => onCTA("find-drive")}
           whileHover={{ scale: 1.02 }}
@@ -1143,21 +958,7 @@ export function DonorRegistration({ onClose, onComplete }: { onClose?: () => voi
     district: "",
     state: "",
     pinCode: "",
-    screening: {
-      weight: null as boolean | null,
-      surgery: null as boolean | null,
-      chronic: null as boolean | null,
-      medication: null as boolean | null,
-    },
   })
-  const [preferences, setPreferences] = useState({
-    push: true,
-    sms: true,
-    email: true,
-    whatsapp: true,
-    showOnWall: true,
-  })
-
   const goNext = () => {
     setDirection(1)
     setCurrentStep((prev) => Math.min(prev + 1, 3))
@@ -1178,8 +979,12 @@ export function DonorRegistration({ onClose, onComplete }: { onClose?: () => voi
     }
   }
 
+  const handleSuccessBack = () => {
+    setShowSuccess(false)
+  }
+
   if (showSuccess) {
-    return <SuccessScreen name={personalData.fullName} onCTA={handleCTA} />
+    return <SuccessScreen name={personalData.fullName} onCTA={handleCTA} onBack={handleSuccessBack} />
   }
 
   const canProceed = () => {
@@ -1187,16 +992,15 @@ export function DonorRegistration({ onClose, onComplete }: { onClose?: () => voi
       case 1:
         return personalData.fullName && personalData.dob && personalData.gender && personalData.bloodType
       case 2:
-        return locationData.city && locationData.state && 
-          Object.values(locationData.screening).every(v => v !== null)
+        return locationData.city && locationData.state
       default:
         return true
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF7ED] px-4 py-8 pt-28 md:pt-32 flex items-start justify-center">
-      <div className="max-w-lg mx-auto">
+    <div className="min-h-screen bg-[#FFF7ED] px-4 py-5 pt-20 md:pt-24 flex items-start justify-center">
+      <div className="max-w-xl w-full mx-auto">
         {/* Close button */}
         {onClose && (
           <button
@@ -1211,7 +1015,7 @@ export function DonorRegistration({ onClose, onComplete }: { onClose?: () => voi
         <ProgressIndicator currentStep={currentStep} totalSteps={4} />
 
         {/* Step Content */}
-        <div className="bg-white rounded-3xl shadow-xl shadow-black/5 p-6 md:p-8 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg shadow-black/5 p-4 md:p-5 overflow-hidden border border-[#EAE4D8]">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={currentStep}
@@ -1245,8 +1049,6 @@ export function DonorRegistration({ onClose, onComplete }: { onClose?: () => voi
                 <ConfirmationStep
                   formData={{ ...personalData, ...locationData }}
                   phoneNumber={phoneNumber}
-                  preferences={preferences}
-                  setPreferences={(data) => setPreferences((prev) => ({ ...prev, ...data }))}
                   onSubmit={handleSubmit}
                 />
               )}

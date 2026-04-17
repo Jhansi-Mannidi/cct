@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { MapPin, Users, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 const events = [
   {
@@ -38,6 +39,7 @@ const events = [
 ]
 
 export function UpcomingEventsSection() {
+  const { language } = useLanguage()
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const containerRef = useRef<HTMLDivElement>(null)
@@ -63,13 +65,13 @@ export function UpcomingEventsSection() {
         >
           <div>
             <span className="inline-block px-4 py-1.5 bg-[#1E3A5F]/10 text-[#1E3A5F] text-sm font-semibold rounded-full mb-4">
-              Join Us
+              {language === "te" ? "మాతో చేరండి" : "Join Us"}
             </span>
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Upcoming Events
+              {language === "te" ? "రాబోయే కార్యక్రమాలు" : "Upcoming Events"}
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl">
-              Register for blood donation camps and events near you.
+              {language === "te" ? "మీ సమీపంలోని రక్తదాన శిబిరాలు మరియు కార్యక్రమాలకు నమోదు చేసుకోండి." : "Register for blood donation camps and events near you."}
             </p>
           </div>
 
@@ -139,7 +141,11 @@ export function UpcomingEventsSection() {
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Users className="w-4 h-4" />
-                      <span>{event.slotsRegistered} of {event.totalSlots} slots filled</span>
+                      <span>
+                        {language === "te"
+                          ? `${event.totalSlots}లో ${event.slotsRegistered} స్లాట్లు నిండాయి`
+                          : `${event.slotsRegistered} of ${event.totalSlots} slots filled`}
+                      </span>
                     </div>
                   </div>
 
@@ -162,7 +168,7 @@ export function UpcomingEventsSection() {
                     whileTap={{ scale: 0.98 }}
                     className={`w-full py-3 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-md transition-colors ${event.button}`}
                   >
-                    Register Now
+                    {language === "te" ? "ఇప్పుడే నమోదు" : "Register Now"}
                     <ArrowRight className="w-4 h-4" />
                   </motion.button>
                 </div>

@@ -14,19 +14,19 @@ interface CCTButtonProps extends Omit<HTMLMotionProps<"button">, "ref"> {
 
 const CCTButton = forwardRef<HTMLButtonElement, CCTButtonProps>(
   ({ variant = "primary", size = "md", isLoading = false, children, className, disabled, ...props }, ref) => {
-    const baseStyles = "inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+    const baseStyles = "inline-flex items-center justify-center font-semibold rounded-full border transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
     
     const variants = {
-      primary: "bg-[#DC2626] text-white hover:bg-[#B91C1C] focus:ring-[#DC2626] shadow-lg shadow-red-500/25",
-      secondary: "bg-[#1E3A5F] text-white hover:bg-[#2D4A6F] focus:ring-[#1E3A5F] shadow-lg shadow-slate-500/25",
-      outline: "border-2 border-[#DC2626] text-[#DC2626] hover:bg-[#DC2626] hover:text-white focus:ring-[#DC2626]",
-      ghost: "text-[#1A1A1A] hover:bg-black/5 focus:ring-[#DC2626]",
+      primary: "bg-[#0A0A0A] border-[#0A0A0A] text-white hover:bg-black focus:ring-black shadow-sm",
+      secondary: "bg-[#1E3A5F] border-[#1E3A5F] text-white hover:bg-[#2D4A6F] focus:ring-[#1E3A5F] shadow-sm",
+      outline: "bg-[#F8F5F0] border-[#D8CCBE] text-[#1A1A1A] hover:bg-white focus:ring-[#D8CCBE]",
+      ghost: "bg-transparent border-transparent text-[#1A1A1A] hover:bg-black/5 focus:ring-[#D8CCBE]",
     }
     
     const sizes = {
       sm: "px-4 py-2 text-sm gap-2",
-      md: "px-6 py-3 text-base gap-2",
-      lg: "px-8 py-4 text-lg gap-3",
+      md: "px-6 py-2.5 text-base gap-2",
+      lg: "px-8 py-3 text-lg gap-3",
     }
     
     return (

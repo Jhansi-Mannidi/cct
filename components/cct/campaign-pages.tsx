@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useInView } from "framer-motion"
 import { useRef, useState, useEffect } from "react"
+import Image from "next/image"
 import {
   Heart,
   Clock,
@@ -35,11 +36,11 @@ const COLORS = {
 
 // Category configurations
 const CATEGORIES = {
-  equipment: { label: "Equipment", color: "bg-blue-500", icon: Wrench },
-  "patient-support": { label: "Patient Support", color: "bg-emerald-500", icon: Stethoscope },
-  "blood-bank-ops": { label: "Blood Bank Ops", color: "bg-red-500", icon: Heart },
-  infrastructure: { label: "Infrastructure", color: "bg-amber-500", icon: Building2 },
-  emergency: { label: "Emergency", color: "bg-rose-600", icon: Zap },
+  equipment: { label: "Equipment", color: "bg-blue-400", icon: Wrench },
+  "patient-support": { label: "Patient Support", color: "bg-emerald-400", icon: Stethoscope },
+  "blood-bank-ops": { label: "Blood Bank Ops", color: "bg-rose-400", icon: Heart },
+  infrastructure: { label: "Infrastructure", color: "bg-amber-400", icon: Building2 },
+  emergency: { label: "Emergency", color: "bg-red-400", icon: Zap },
 }
 
 // City options
@@ -334,7 +335,7 @@ function AnimatedProgressBar({ value, max, delay = 0 }: { value: number; max: nu
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="h-full bg-gradient-to-r from-[#DC2626] to-[#F97316] rounded-full"
+          className="h-full bg-gradient-to-r from-[#D88A99] to-[#E9B36A] rounded-full"
         />
       </div>
       <div className="flex justify-between text-sm">
@@ -359,6 +360,9 @@ function CampaignCard({
   const isInView = useInView(ref, { once: true, margin: "-50px" })
   const categoryConfig = CATEGORIES[campaign.category as keyof typeof CATEGORIES]
   const CategoryIcon = categoryConfig?.icon || Heart
+  const coverImage = campaign.id === "thalassemia-support" || campaign.id === "refrigeration-upgrade"
+    ? "/images/chiranjeevi-portrait.png"
+    : "/images/chiranjeevi.jpg"
 
   return (
     <motion.div
@@ -368,57 +372,63 @@ function CampaignCard({
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -8, transition: { duration: 0.3 } }}
       onClick={onClick}
-      className={`cursor-pointer rounded-3xl overflow-hidden shadow-lg shadow-black/10 border border-gray-100 bg-white group ${
-        campaign.isGeneralFund ? "md:col-span-2" : ""
-      }`}
+      className="cursor-pointer rounded-2xl overflow-hidden shadow-md shadow-black/6 border border-[#E9E1D4] bg-white group"
     >
       {campaign.isGeneralFund ? (
-        // General Fund Card - Special Styling
-        <div className="bg-gradient-to-br from-[#1E3A5F] to-[#0F172A] p-8 md:p-10 text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fff' fill-opacity='.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }} />
-          </div>
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
-            <div className="flex-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F59E0B]/20 text-[#F59E0B] rounded-full text-sm font-medium mb-4">
-                <Heart className="w-4 h-4" />
+        // General Fund Card - same image-first layout
+        <>
+          <div className="relative h-40 overflow-hidden">
+            <Image
+              src="/images/chiranjeevi.jpg"
+              alt="Chiranjeevi campaign"
+              fill
+              className="object-cover object-top"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(0,0,0,0.14)_100%)]" />
+            <div className="absolute top-4 left-4">
+              <span className="px-3 py-1 bg-[#F6D777] text-[#6B4E00] text-xs font-semibold rounded-full">
                 General Fund
-              </div>
-              <h3 className="font-serif text-2xl md:text-3xl font-bold mb-3">
-                {campaign.title}
-              </h3>
-              <p className="text-white/70 text-lg mb-6">
-                {campaign.description}
-              </p>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
-                <span className="flex items-center gap-1.5">
-                  <Users className="w-4 h-4" />
-                  {campaign.donors.toLocaleString()} donors
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <TrendingUp className="w-4 h-4" />
-                  {formatINR(campaign.raised)} raised
-                </span>
-              </div>
+              </span>
+            </div>
+          </div>
+
+          <div className="p-4">
+            <h3 className="font-serif text-[2rem] leading-[1.05] font-bold text-[#1A1A1A] mb-2 group-hover:text-[#B85B6A] transition-colors">
+              {campaign.title}
+            </h3>
+            <p className="text-sm text-[#6B7280] mb-3 line-clamp-4">{campaign.description}</p>
+            <div className="flex items-center justify-between text-sm text-[#6B7280]">
+              <span className="flex items-center gap-1.5">
+                <Users className="w-4 h-4" />
+                {campaign.donors.toLocaleString()} donors
+              </span>
+              <span className="flex items-center gap-1.5">
+                <TrendingUp className="w-4 h-4" />
+                {formatINR(campaign.raised)}
+              </span>
             </div>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-[#F59E0B] text-[#1A1A1A] font-semibold rounded-xl shadow-lg hover:bg-[#FBBF24] transition-colors flex items-center gap-2"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full mt-3 py-2.5 bg-[#B85B6A] text-white font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-[#A44C5C] transition-colors"
             >
-              <Heart className="w-5 h-5" />
+              <Heart className="w-4 h-4" />
               Contribute
             </motion.button>
           </div>
-        </div>
+        </>
       ) : (
         // Regular Campaign Card
         <>
           {/* Cover Image */}
-          <div className={`relative h-48 bg-gradient-to-br ${campaign.coverGradient} overflow-hidden`}>
-            <div className="absolute inset-0 bg-black/20" />
+          <div className="relative h-40 overflow-hidden">
+            <Image
+              src={coverImage}
+              alt={campaign.title}
+              fill
+              className="object-cover object-top"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.20)_0%,rgba(0,0,0,0.08)_100%)]" />
             <div className="absolute inset-0 flex items-center justify-center">
               <CategoryIcon className="w-16 h-16 text-white/30" />
             </div>
@@ -437,10 +447,10 @@ function CampaignCard({
                 transition={{ duration: 1.5, repeat: Infinity }}
                 className="absolute top-4 right-4"
               >
-                <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-[#DC2626] text-xs font-bold rounded-full shadow-lg">
+                <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-[#B85B6A] text-xs font-bold rounded-full shadow-lg">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC2626] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DC2626]" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B85B6A] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B85B6A]" />
                   </span>
                   Urgent
                 </span>
@@ -457,11 +467,11 @@ function CampaignCard({
           </div>
 
           {/* Content */}
-          <div className="p-6">
+          <div className="p-4">
             <h3 className="font-serif text-xl font-bold text-[#1A1A1A] mb-1 group-hover:text-[#DC2626] transition-colors line-clamp-2">
               {campaign.title}
             </h3>
-            <p className="text-sm text-[#6B7280] mb-4 flex items-center gap-1.5">
+            <p className="text-sm text-[#6B7280] mb-3 flex items-center gap-1.5">
               <Building2 className="w-4 h-4" />
               {campaign.institution} • {campaign.city}
             </p>
@@ -470,7 +480,7 @@ function CampaignCard({
             <AnimatedProgressBar value={campaign.raised} max={campaign.goal} delay={0.2 + index * 0.1} />
 
             {/* Meta */}
-            <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100 text-sm text-[#6B7280]">
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 text-sm text-[#6B7280]">
               <span className="flex items-center gap-1.5">
                 <Users className="w-4 h-4" />
                 {campaign.donors} donors
@@ -485,7 +495,7 @@ function CampaignCard({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full mt-4 py-3 bg-[#DC2626] text-white font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-[#B91C1C] transition-colors"
+              className="w-full mt-3 py-2.5 bg-[#B85B6A] text-white font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-[#A44C5C] transition-colors"
             >
               <Heart className="w-4 h-4" />
               Contribute
@@ -925,7 +935,7 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           ref={ref}
-          className="min-h-screen bg-[#FFF7ED] pt-8 pb-20"
+          className="min-h-screen bg-[#FFF7ED] pt-2 pb-8"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Page Header */}
@@ -933,16 +943,16 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
-              className="text-center mb-12"
+              className="text-center mb-5"
             >
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-[#DC2626] rounded-full text-sm font-medium mb-4">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-rose-100 text-[#B85B6A] rounded-full text-sm font-medium mb-2">
                 <Heart className="w-4 h-4" />
                 Financial Campaigns
               </span>
-              <h1 className="font-serif text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
+              <h1 className="font-serif text-3xl md:text-5xl font-bold text-[#1A1A1A] mb-3">
                 Campaigns
               </h1>
-              <p className="text-lg text-[#6B7280] max-w-2xl mx-auto">
+              <p className="text-base md:text-lg text-[#6B7280] max-w-2xl mx-auto">
                 Fund life-saving equipment and patient care across Andhra Pradesh & Telangana.
               </p>
             </motion.div>
@@ -952,10 +962,10 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mb-8"
+              className="mb-4"
             >
               {/* Category Tabs - Horizontally scrollable */}
-              <div className="flex gap-2 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:justify-center scrollbar-hide">
+              <div className="flex gap-2 overflow-x-auto pb-0.5 -mx-4 px-4 md:mx-0 md:px-0 md:justify-center scrollbar-hide">
                 {FILTER_TABS.map((tab) => (
                   <button
                     key={tab.id}
@@ -965,7 +975,7 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
                     {activeFilter === tab.id && (
                       <motion.div
                         layoutId="activeFilter"
-                        className="absolute inset-0 bg-[#DC2626] rounded-full"
+                        className="absolute inset-0 bg-[#B85B6A] rounded-full"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
                     )}
@@ -977,7 +987,7 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
               </div>
 
               {/* Additional Filters */}
-              <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-1.5">
                 {/* City Dropdown */}
                 <div className="relative">
                   <select
@@ -998,7 +1008,7 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
                     onClick={() => setStatusFilter("active")}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       statusFilter === "active"
-                        ? "bg-[#DC2626] text-white"
+                        ? "bg-[#B85B6A] text-white"
                         : "text-[#6B7280] hover:text-[#1A1A1A]"
                     }`}
                   >
@@ -1008,7 +1018,7 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
                     onClick={() => setStatusFilter("completed")}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       statusFilter === "completed"
-                        ? "bg-[#DC2626] text-white"
+                        ? "bg-[#B85B6A] text-white"
                         : "text-[#6B7280] hover:text-[#1A1A1A]"
                     }`}
                   >
@@ -1020,7 +1030,7 @@ export function CampaignPages({ onNavigate }: { onNavigate?: (page: string) => v
 
             {/* Campaign Grid */}
             {sortedCampaigns.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 {sortedCampaigns.map((campaign, index) => (
                   <CampaignCard
                     key={campaign.id}

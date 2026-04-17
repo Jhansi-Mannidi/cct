@@ -8,10 +8,12 @@ interface CCTInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
   error?: string
   helperText?: string
+  hideRequiredIndicator?: boolean
+  fieldClassName?: string
 }
 
 export const CCTInput = forwardRef<HTMLInputElement, CCTInputProps>(
-  ({ label, error, helperText, className, ...props }, ref) => {
+  ({ label, error, helperText, className, fieldClassName, required, hideRequiredIndicator, ...props }, ref) => {
     const [isFocused, setIsFocused] = useState(false)
     const [hasValue, setHasValue] = useState(false)
 
@@ -44,7 +46,8 @@ export const CCTInput = forwardRef<HTMLInputElement, CCTInputProps>(
               "peer w-full px-4 py-3 pt-6 border-2 rounded-xl text-[#1A1A1A] bg-white transition-all duration-200 outline-none",
               error 
                 ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20" 
-                : "border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20"
+                : "border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20",
+              fieldClassName
             )}
             placeholder=" "
           />
@@ -59,6 +62,7 @@ export const CCTInput = forwardRef<HTMLInputElement, CCTInputProps>(
             className="absolute left-4 top-4 origin-left pointer-events-none font-medium"
           >
             {label}
+            {required && !hideRequiredIndicator && <span className="text-[#DC2626]"> *</span>}
           </motion.label>
         </div>
         
@@ -169,10 +173,12 @@ interface CCTTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElem
   label: string
   error?: string
   helperText?: string
+  hideRequiredIndicator?: boolean
+  fieldClassName?: string
 }
 
 export const CCTTextarea = forwardRef<HTMLTextAreaElement, CCTTextareaProps>(
-  ({ label, error, helperText, className, ...props }, ref) => {
+  ({ label, error, helperText, className, fieldClassName, required, hideRequiredIndicator, ...props }, ref) => {
     const [isFocused, setIsFocused] = useState(false)
     const [hasValue, setHasValue] = useState(false)
 
@@ -201,7 +207,8 @@ export const CCTTextarea = forwardRef<HTMLTextAreaElement, CCTTextareaProps>(
               "peer w-full px-4 py-3 pt-6 border-2 rounded-xl text-[#1A1A1A] bg-white transition-all duration-200 outline-none min-h-[120px] resize-none",
               error 
                 ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20" 
-                : "border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20"
+                : "border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20",
+              fieldClassName
             )}
             placeholder=" "
           />
@@ -216,6 +223,7 @@ export const CCTTextarea = forwardRef<HTMLTextAreaElement, CCTTextareaProps>(
             className="absolute left-4 top-4 origin-left pointer-events-none font-medium"
           >
             {label}
+            {required && !hideRequiredIndicator && <span className="text-[#DC2626]"> *</span>}
           </motion.label>
         </div>
         

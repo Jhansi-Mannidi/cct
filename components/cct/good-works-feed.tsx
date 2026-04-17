@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Heart, Share2, X, Check, Camera, MessageCircle, BadgeCheck } from "lucide-react"
+import { Heart, Share2, X, Camera, MessageCircle, BadgeCheck } from "lucide-react"
 
 // Mock data for 8 stories
 const mockStories = [
@@ -14,7 +14,7 @@ const mockStories = [
     date: "2 days ago",
     likes: 234,
     category: "Blood Drives",
-    gradient: "from-red-400 to-orange-300",
+    image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
   {
@@ -25,7 +25,7 @@ const mockStories = [
     date: "5 days ago",
     likes: 189,
     category: "Blood Drives",
-    gradient: "from-amber-400 to-yellow-300",
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
   {
@@ -36,7 +36,7 @@ const mockStories = [
     date: "1 week ago",
     likes: 412,
     category: "Fundraisers",
-    gradient: "from-rose-400 to-pink-300",
+    image: "https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
   {
@@ -47,7 +47,7 @@ const mockStories = [
     date: "3 days ago",
     likes: 98,
     category: "Volunteering",
-    gradient: "from-orange-400 to-amber-300",
+    image: "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
   {
@@ -58,7 +58,7 @@ const mockStories = [
     date: "2 weeks ago",
     likes: 567,
     category: "Fundraisers",
-    gradient: "from-yellow-400 to-orange-300",
+    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
   {
@@ -69,7 +69,7 @@ const mockStories = [
     date: "4 days ago",
     likes: 76,
     category: "Volunteering",
-    gradient: "from-red-300 to-rose-400",
+    image: "https://images.unsplash.com/photo-1469571486292-b53601020f3d?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
   {
@@ -80,7 +80,7 @@ const mockStories = [
     date: "1 week ago",
     likes: 321,
     category: "Milestones",
-    gradient: "from-amber-300 to-yellow-400",
+    image: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
   {
@@ -91,7 +91,7 @@ const mockStories = [
     date: "6 days ago",
     likes: 445,
     category: "Milestones",
-    gradient: "from-rose-300 to-red-400",
+    image: "https://images.unsplash.com/photo-1512678080530-7760d81faba6?auto=format&fit=crop&w=1200&q=80",
     verified: true,
   },
 ]
@@ -127,9 +127,15 @@ function StoryCard({
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="bg-white rounded-2xl shadow-lg shadow-black/5 overflow-hidden hover:shadow-xl transition-shadow duration-300"
     >
-      {/* Image Placeholder with Gradient */}
-      <div className={`h-48 bg-gradient-to-br ${story.gradient} relative`}>
-        <div className="absolute inset-0 bg-black/10" />
+      {/* Cover Image */}
+      <div className="h-48 relative overflow-hidden">
+        <img
+          src={story.image}
+          alt={`${story.category} story by ${story.authorName}`}
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
         <div className="absolute bottom-3 left-3">
           <span className="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-[#1E3A5F]">
             {story.category}
@@ -292,7 +298,14 @@ function StorySubmissionModal({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            className={`
+              bg-white rounded-3xl shadow-2xl w-full overflow-hidden
+              ${
+                submitted
+                  ? "max-w-2xl"
+                  : "max-w-lg md:max-w-none md:w-[760px] md:h-[760px] md:max-h-[90vh] overflow-y-auto"
+              }
+            `}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -325,35 +338,37 @@ function StorySubmissionModal({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onSubmit={handleSubmit}
-                    className="space-y-5"
+                    className="space-y-4"
                   >
-                    {/* Name */}
-                    <div>
-                      <label className="block text-sm font-medium text-[#374151] mb-2">
-                        Your Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-red-100 outline-none transition-all"
-                        placeholder="Enter your name"
-                      />
-                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* Name */}
+                      <div>
+                        <label className="block text-sm font-medium text-[#374151] mb-2">
+                          Your Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-red-100 outline-none transition-all"
+                          placeholder="Enter your name"
+                        />
+                      </div>
 
-                    {/* Organization */}
-                    <div>
-                      <label className="block text-sm font-medium text-[#374151] mb-2">
-                        Your Organization <span className="text-[#9CA3AF]">(optional)</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.organization}
-                        onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-red-100 outline-none transition-all"
-                        placeholder="e.g., CCT Hyderabad Chapter"
-                      />
+                      {/* Organization */}
+                      <div>
+                        <label className="block text-sm font-medium text-[#374151] mb-2">
+                          Your Organization <span className="text-[#9CA3AF]">(optional)</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.organization}
+                          onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-red-100 outline-none transition-all"
+                          placeholder="e.g., CCT Hyderabad Chapter"
+                        />
+                      </div>
                     </div>
 
                     {/* Story */}
@@ -364,7 +379,7 @@ function StorySubmissionModal({
                       <textarea
                         required
                         maxLength={500}
-                        rows={5}
+                        rows={4}
                         value={formData.story}
                         onChange={(e) => setFormData({ ...formData, story: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#DC2626] focus:ring-2 focus:ring-red-100 outline-none transition-all resize-none"
@@ -382,7 +397,7 @@ function StorySubmissionModal({
                       <label className="block text-sm font-medium text-[#374151] mb-2">
                         Add a Photo <span className="text-[#9CA3AF]">(optional)</span>
                       </label>
-                      <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-[#DC2626] transition-colors cursor-pointer">
+                      <div className="border-2 border-dashed border-gray-200 rounded-xl p-5 text-center hover:border-[#DC2626] transition-colors cursor-pointer">
                         <Camera className="w-8 h-8 text-[#9CA3AF] mx-auto mb-2" />
                         <p className="text-sm text-[#6B7280]">Click to upload or drag and drop</p>
                         <p className="text-xs text-[#9CA3AF] mt-1">PNG, JPG up to 5MB</p>
@@ -414,41 +429,16 @@ function StorySubmissionModal({
                 ) : (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-8"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="py-14 text-center"
                   >
-                    {/* Checkmark Animation */}
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", damping: 15, stiffness: 200, delay: 0.2 }}
-                      className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6"
-                    >
-                      <motion.div
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                      >
-                        <Check className="w-10 h-10 text-green-600" />
-                      </motion.div>
-                    </motion.div>
-
-                    <h3 className="font-serif text-2xl font-bold text-[#1A1A1A] mb-3">
-                      Thank You!
+                    <h3 className="font-serif text-3xl font-bold text-[#1A1A1A] mb-3">
+                      Story submitted successfully
                     </h3>
-                    <p className="text-[#6B7280] mb-6">
-                      Your story will appear after review by the CCT team.
+                    <p className="text-[#6B7280] text-base max-w-lg mx-auto">
+                      Thank you for sharing your impact story. It will appear after CCT review.
                     </p>
-
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={handleClose}
-                      className="px-8 py-3 bg-[#1E3A5F] text-white font-semibold rounded-xl hover:bg-[#2a4a73] transition-colors"
-                    >
-                      Close
-                    </motion.button>
                   </motion.div>
                 )}
               </AnimatePresence>

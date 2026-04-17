@@ -2,7 +2,9 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useEffect, useState } from "react"
+import Image from "next/image"
 import { Heart, Clock, Users, ArrowRight, AlertCircle } from "lucide-react"
+import { useLanguage } from "./language-context"
 
 const campaigns = [
   {
@@ -15,6 +17,7 @@ const campaigns = [
     daysLeft: 23,
     urgent: false,
     gradient: "from-[#DC2626] to-[#F97316]",
+    image: "/images/chiranjeevi.jpg",
   },
   {
     id: 2,
@@ -26,6 +29,7 @@ const campaigns = [
     daysLeft: 45,
     urgent: false,
     gradient: "from-[#1E3A5F] to-[#3B82F6]",
+    image: "/images/chiranjeevi-portrait.png",
   },
   {
     id: 3,
@@ -37,6 +41,7 @@ const campaigns = [
     daysLeft: 8,
     urgent: true,
     gradient: "from-[#B91C1C] to-[#DC2626]",
+    image: "/images/chiranjeevi.jpg",
   },
 ]
 
@@ -98,18 +103,19 @@ function AnimatedProgress({ value, max, delay }: { value: number; max: number; d
 }
 
 export function FeaturedCampaignsSection() {
+  const { language } = useLanguage()
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section className="py-24 bg-[#FFF7ED]">
+    <section className="py-16 md:py-18 bg-[#FFF7ED]">
       <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between mb-12"
+          className="flex flex-col md:flex-row md:items-end md:justify-between mb-8 md:mb-10"
         >
           <div className="space-y-4">
             <motion.span
@@ -118,7 +124,7 @@ export function FeaturedCampaignsSection() {
               transition={{ duration: 0.4, delay: 0.15 }}
               className="inline-block px-4 py-1.5 bg-amber-100 text-[#F59E0B] text-sm font-semibold rounded-full"
             >
-              Financial Giving
+              {language === "te" ? "ఆర్థిక సహాయం" : "Financial Giving"}
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
@@ -126,7 +132,7 @@ export function FeaturedCampaignsSection() {
               transition={{ duration: 0.55, delay: 0.2 }}
               className="font-serif text-4xl md:text-5xl font-bold text-[#1A1A1A]"
             >
-              Active Campaigns
+              {language === "te" ? "క్రియాశీల ప్రచారాలు" : "Active Campaigns"}
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 18 }}
@@ -134,7 +140,9 @@ export function FeaturedCampaignsSection() {
               transition={{ duration: 0.55, delay: 0.3 }}
               className="text-lg text-[#6B7280] max-w-xl"
             >
-              Support our initiatives to strengthen blood banking infrastructure and save more lives.
+              {language === "te"
+                ? "రక్త బ్యాంక్ మౌలిక సదుపాయాలను బలోపేతం చేసి మరిన్ని ప్రాణాలను కాపాడేందుకు మా కార్యక్రమాలకు మద్దతు ఇవ్వండి."
+                : "Support our initiatives to strengthen blood banking infrastructure and save more lives."}
             </motion.p>
           </div>
           <motion.a
@@ -145,7 +153,7 @@ export function FeaturedCampaignsSection() {
             whileHover={{ x: 5 }}
             className="flex items-center gap-2 text-[#DC2626] font-semibold mt-4 md:mt-0 group"
           >
-            View All
+            {language === "te" ? "అన్నీ చూడండి" : "View All"}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </motion.a>
         </motion.div>
@@ -155,7 +163,7 @@ export function FeaturedCampaignsSection() {
           variants={gridVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible snap-x snap-mandatory md:snap-none"
+          className="flex md:grid md:grid-cols-3 gap-4 md:gap-5 overflow-x-auto pb-3 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible snap-x snap-mandatory md:snap-none"
         >
           {campaigns.map((campaign, index) => (
             <motion.div
@@ -181,20 +189,26 @@ export function FeaturedCampaignsSection() {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC2626] opacity-75" />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DC2626]" />
                       </span>
-                      Urgent
+                      {language === "te" ? "తక్షణం" : "Urgent"}
                     </span>
                   </motion.div>
                 )}
 
-                {/* Cover Image Placeholder */}
-                <div className="relative h-48 overflow-hidden">
+                {/* Cover Image */}
+                <div className="relative h-40 md:h-44 overflow-hidden">
+                  <Image
+                    src={campaign.image}
+                    alt={campaign.title}
+                    fill
+                    className="object-cover object-top"
+                  />
                   <motion.div
                     initial={{ x: "-100%" }}
                     animate={isInView ? { x: "140%" } : {}}
                     transition={{ duration: 1.2, ease: "easeInOut", delay: 0.45 + index * 0.12 }}
                     className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
                   />
-                  <div className="absolute inset-0 bg-black/20" />
+                  <div className="absolute inset-0 bg-black/40" />
                   <div 
                     className="absolute inset-0 opacity-30"
                     style={{
@@ -204,11 +218,11 @@ export function FeaturedCampaignsSection() {
                 </div>
 
                 {/* Content */}
-                <div className="p-6 text-white">
+                <div className="p-4 md:p-5 text-white">
                   <h3 className="font-serif text-xl font-bold mb-1">
                     {campaign.title}
                   </h3>
-                  <p className="text-white/70 text-sm mb-4">
+                  <p className="text-white/70 text-sm mb-3">
                     {campaign.institution}
                   </p>
 
@@ -220,24 +234,24 @@ export function FeaturedCampaignsSection() {
                   />
 
                   {/* Stats */}
-                  <div className="flex items-center justify-between mt-3 mb-4">
+                  <div className="flex items-center justify-between mt-3 mb-3">
                     <span className="font-semibold">
-                      {formatINR(campaign.raised)} raised
+                      {language === "te" ? `${formatINR(campaign.raised)} సేకరించాం` : `${formatINR(campaign.raised)} raised`}
                     </span>
                     <span className="text-white/70 text-sm">
-                      of {formatINR(campaign.goal)}
+                      {language === "te" ? `లక్ష్యం ${formatINR(campaign.goal)}` : `of ${formatINR(campaign.goal)}`}
                     </span>
                   </div>
 
                   {/* Meta */}
-                  <div className="flex items-center justify-between text-sm text-white/70 mb-4">
+                  <div className="flex items-center justify-between text-sm text-white/70 mb-3">
                     <span className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
-                      {campaign.donors} donors
+                      {language === "te" ? `${campaign.donors} దాతలు` : `${campaign.donors} donors`}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />
-                      {campaign.daysLeft} days left
+                      {language === "te" ? `ఇంకా ${campaign.daysLeft} రోజులు` : `${campaign.daysLeft} days left`}
                     </span>
                   </div>
 
@@ -245,10 +259,10 @@ export function FeaturedCampaignsSection() {
                   <motion.button
                     whileHover={{ scale: 1.02, y: -1 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 bg-white text-[#1A1A1A] font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+                    className="w-full py-2.5 bg-white text-[#1A1A1A] font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
                   >
                     <Heart className="w-4 h-4" />
-                    Contribute
+                    {language === "te" ? "సహకరించండి" : "Contribute"}
                   </motion.button>
                 </div>
               </div>

@@ -2,49 +2,41 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import { 
-  Menu, X, Heart, Droplet, Calendar, Users, ChevronDown, 
-  Search, Trophy, Sparkles, Info, UserPlus, Building2, Award,
+  Menu, X, Heart, Droplet, ChevronDown,
+  Search, Trophy, Sparkles, UserPlus, Award, ShieldCheck, AlertTriangle,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "./language-context"
 
 const navLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Home", teluguLabel: "హోమ్", href: "#home" },
+  { label: "Impact Ledger", teluguLabel: "ఇంపాక్ట్ లెడ్జర్", href: "#impact" },
   { 
-    label: "Blood Donation", 
-    href: "#blood-donation",
-    children: [
-      { label: "Register as Donor", href: "#register", icon: UserPlus },
-      { label: "Find Blood", href: "#find-blood", icon: Search },
-      { label: "Blood Inventory", href: "#inventory", icon: Droplet },
-      { label: "Donor Wall", href: "#donor-wall", icon: Award },
-    ]
-  },
-  { label: "Campaigns", href: "#campaigns" },
-  { label: "Events", href: "#events" },
-  { 
-    label: "Community", 
+    label: "Community",
+    teluguLabel: "కమ్యూనిటీ",
     href: "#community",
     children: [
-      { label: "Good Works", href: "#good-works", icon: Heart },
-      { label: "Leaderboards", href: "#leaderboards", icon: Trophy },
-      { label: "Our Impact", href: "#impact", icon: Sparkles },
+      { label: "Good Works", teluguLabel: "మంచి కార్యక్రమాలు", href: "#good-works", icon: Heart },
+      { label: "Leaderboards", teluguLabel: "లీడర్‌బోర్డులు", href: "#leaderboards", icon: Trophy },
+      { label: "Donor Wall", teluguLabel: "దాతల గోడ", href: "#donor-wall", icon: Award },
     ]
   },
-  { label: "About", href: "#about" },
+  { label: "Contact Us", teluguLabel: "సంప్రదించండి", href: "#trust", icon: ShieldCheck },
+  { label: "Emergency", teluguLabel: "అత్యవసరం", href: "#emergency", icon: AlertTriangle },
 ]
 
 interface CCTNavigationProps {
   onNavigate?: (page: string) => void
   currentPage?: string
-  announcementVisible?: boolean
 }
 
 export function CCTNavigation({
   onNavigate,
   currentPage = "home",
-  announcementVisible = true,
 }: CCTNavigationProps) {
+  const { language, setLanguage } = useLanguage()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
@@ -72,7 +64,13 @@ export function CCTNavigation({
 
   const handleNavClick = (href: string) => {
     const page = href.replace("#", "")
-    onNavigate?.(page)
+    const aliasMap: Record<string, string> = {
+      community: "good-works",
+      emergency: "find-blood",
+      trust: "contact",
+    }
+    const mappedPage = aliasMap[page] ?? page
+    onNavigate?.(mappedPage)
     setMobileMenuOpen(false)
   }
 
@@ -83,16 +81,16 @@ export function CCTNavigation({
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={cn(
         "fixed left-0 right-0 z-50 transition-all duration-500",
-        announcementVisible && !isScrolled ? "top-10" : "top-0",
+        "top-0",
         isScrolled 
-          ? "bg-white/95 backdrop-blur-xl shadow-lg shadow-black/5 py-2" 
-          : "bg-white/80 backdrop-blur-sm py-4"
+          ? "bg-[#F4EFE9] backdrop-blur-xl shadow-lg shadow-black/5 py-1.5" 
+          : "bg-[#F4EFE9] backdrop-blur-sm py-2"
       )}
     >
       <nav className="w-full px-2 sm:px-3 lg:px-4">
         <div className={cn(
           "flex items-center justify-between transition-all duration-300",
-          isScrolled ? "h-14" : "h-16"
+          isScrolled ? "h-12" : "h-14"
         )}>
           {/* Logo */}
           <motion.a
@@ -107,14 +105,17 @@ export function CCTNavigation({
             <div className="relative">
               <motion.div 
                 className={cn(
-                  "bg-gradient-to-br from-[#DC2626] to-[#B91C1C] rounded-xl flex items-center justify-center shadow-lg shadow-red-500/30 transition-all duration-300",
+                  "rounded-xl flex items-center justify-center shadow-lg shadow-red-500/20 transition-all duration-300 overflow-hidden bg-white",
                   isScrolled ? "w-10 h-10" : "w-12 h-12"
                 )}
               >
-                <Droplet className={cn(
-                  "text-white transition-all duration-300",
-                  isScrolled ? "w-5 h-5" : "w-6 h-6"
-                )} />
+                <Image
+                  src="/images/cct-logo.png"
+                  alt="CCT logo"
+                  width={56}
+                  height={56}
+                  className="w-full h-full object-contain"
+                />
               </motion.div>
             </div>
             <div className="hidden sm:block">
@@ -122,7 +123,7 @@ export function CCTNavigation({
               <p className={cn(
                 "text-[#6B7280] font-semibold transition-all duration-300",
                 isScrolled ? "text-[10px] -mt-1" : "text-xs -mt-0.5"
-                )}>Chiranjeevi Charitable Trust</p>
+                )}>{language === "te" ? "చిరంజీవి చారిటబుల్ ట్రస్ట్" : "Chiranjeevi Charitable Trust"}</p>
             </div>
           </motion.a>
 
@@ -145,13 +146,13 @@ export function CCTNavigation({
                   }}
                   whileHover={{ scale: 1.02 }}
                   className={cn(
-                    "flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200",
+                    "group relative flex items-center gap-1 px-4 py-2 text-[11px] uppercase tracking-[0.14em] font-semibold rounded-full transition-all duration-200 border",
                     currentPage === link.href.replace("#", "")
-                      ? "text-[#DC2626] bg-red-50"
-                      : "text-[#374151] hover:text-[#1A1A1A] hover:bg-gray-100/80"
+                      ? "text-[#1A1A1A] bg-[#FBF9F5] border-[#DDD4C7] shadow-[0_1px_0_rgba(0,0,0,0.05)]"
+                      : "text-[#5B5449] border-transparent hover:text-[#1A1A1A] hover:bg-[#FBF9F5] hover:border-[#DDD4C7] hover:shadow-[0_1px_0_rgba(0,0,0,0.05)]"
                   )}
                 >
-                  {link.label}
+                  {language === "te" ? link.teluguLabel : link.label}
                   {link.children && (
                     <motion.div
                       animate={{ rotate: activeDropdown === link.label ? 180 : 0 }}
@@ -192,7 +193,7 @@ export function CCTNavigation({
                                 <child.icon className="w-4 h-4 text-[#DC2626]" />
                               </div>
                             )}
-                            <span className="font-medium">{child.label}</span>
+                            <span className="font-medium">{language === "te" ? child.teluguLabel : child.label}</span>
                           </motion.a>
                         ))}
                       </div>
@@ -205,37 +206,50 @@ export function CCTNavigation({
 
           {/* Right Side - CTA & User */}
           <div className="hidden lg:flex items-center gap-3">
-            <motion.button
-              whileHover={{ scale: 1.02, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleNavClick("#donate")}
-              className="relative px-4 py-2 text-sm bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300"
-            >
-              {/* Pulsing glow effect */}
-              <motion.div
-                animate={{ 
-                  scale: [1, 1.1, 1],
-                  opacity: [0.5, 0.2, 0.5]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 bg-[#DC2626] rounded-xl blur-lg -z-10"
-              />
-              <span className="flex items-center gap-2">
-                <Heart className="w-4 h-4" />
-                Donate Funds
-              </span>
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.02, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleNavClick("#register")}
-              className="px-4 py-2 text-sm border border-[#DC2626] text-[#DC2626] font-semibold rounded-xl hover:bg-red-50 transition-all duration-300"
-            >
-              <span className="flex items-center gap-2">
-                <UserPlus className="w-4 h-4" />
-                Register as Donors
-              </span>
-            </motion.button>
+            <div className="flex items-center border border-[#D8CCBE]">
+              <button
+                onClick={() => setLanguage("en")}
+                className={cn(
+                  "px-2.5 py-1.5 text-[11px] uppercase tracking-[0.12em] font-semibold transition-colors",
+                  language === "en" ? "bg-[#0A0A0A] text-white" : "bg-transparent text-[#1A1A1A]"
+                )}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage("te")}
+                className={cn(
+                  "px-2.5 py-1.5 text-[11px] tracking-[0.08em] font-semibold transition-colors border-l border-[#D8CCBE]",
+                  language === "te" ? "bg-[#0A0A0A] text-white" : "bg-transparent text-[#1A1A1A]"
+                )}
+              >
+                తెలు
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleNavClick("#register")}
+                className="px-5 py-2.5 text-[11px] uppercase tracking-[0.12em] bg-[#F8F5F0] text-[#1A1A1A] font-semibold border border-[#D8CCBE] rounded-full transition-all duration-300 hover:bg-white"
+              >
+                <span className="flex items-center gap-2">
+                  <Droplet className="w-4 h-4 text-[#DC2626]" />
+                  {language === "te" ? "రక్తదానం" : "Donate Blood"}
+                </span>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleNavClick("#donate")}
+                className="px-5 py-2.5 text-[11px] uppercase tracking-[0.12em] bg-black text-white font-semibold border border-black rounded-full transition-all duration-300"
+              >
+                <span className="flex items-center gap-2">
+                  <Heart className="w-4 h-4" />
+                  {language === "te" ? "సహకరించండి" : "Contribute"}
+                </span>
+              </motion.button>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -297,8 +311,14 @@ export function CCTNavigation({
               {/* Close Button */}
               <div className="flex items-center justify-between p-6 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-[#DC2626] to-[#B91C1C] rounded-xl flex items-center justify-center">
-                    <Droplet className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-white shadow-md shadow-red-500/20 flex items-center justify-center">
+                    <Image
+                      src="/images/cct-logo.png"
+                      alt="CCT logo"
+                      width={40}
+                      height={40}
+                      className="w-full h-full object-contain"
+                    />
                   </div>
                   <span className="font-serif text-lg font-bold text-[#1A1A1A]">CCT</span>
                 </div>
@@ -335,7 +355,7 @@ export function CCTNavigation({
                             )}
                             className="flex items-center justify-between w-full px-4 py-4 text-lg font-medium text-[#1A1A1A] hover:bg-gray-50 rounded-xl transition-colors"
                           >
-                            {link.label}
+                            {language === "te" ? link.teluguLabel : link.label}
                             <motion.div
                               animate={{ rotate: expandedMobileSection === link.label ? 180 : 0 }}
                               transition={{ duration: 0.2 }}
@@ -371,7 +391,7 @@ export function CCTNavigation({
                                           <child.icon className="w-4 h-4 text-[#DC2626]" />
                                         </div>
                                       )}
-                                      <span className="font-medium">{child.label}</span>
+                                      <span className="font-medium">{language === "te" ? child.teluguLabel : child.label}</span>
                                     </motion.a>
                                   ))}
                                 </div>
@@ -393,7 +413,7 @@ export function CCTNavigation({
                               : "text-[#1A1A1A] hover:bg-gray-50"
                           )}
                         >
-                          {link.label}
+                          {language === "te" ? link.teluguLabel : link.label}
                         </a>
                       )}
                     </motion.div>
@@ -407,24 +427,46 @@ export function CCTNavigation({
                   transition={{ delay: 0.4 }}
                   className="mt-8 pt-8 border-t border-gray-100 space-y-3"
                 >
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleNavClick("#donate")}
-                    className="w-full px-5 py-3 bg-gradient-to-r from-[#DC2626] to-[#B91C1C] text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 flex items-center justify-center gap-2"
-                  >
-                    <Heart className="w-5 h-5" />
-                    Donate Funds
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleNavClick("#register")}
-                    className="w-full px-5 py-3 border border-[#DC2626] text-[#DC2626] font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-red-50 transition-colors"
-                  >
-                    <UserPlus className="w-5 h-5" />
-                    Register as Donors
-                  </motion.button>
+                  <div className="flex items-center border border-[#D8CCBE] w-fit">
+                    <button
+                      onClick={() => setLanguage("en")}
+                      className={cn(
+                        "px-2.5 py-1.5 text-[11px] uppercase tracking-[0.12em] font-semibold transition-colors",
+                        language === "en" ? "bg-[#0A0A0A] text-white" : "bg-transparent text-[#1A1A1A]"
+                      )}
+                    >
+                      EN
+                    </button>
+                    <button
+                      onClick={() => setLanguage("te")}
+                      className={cn(
+                        "px-2.5 py-1.5 text-[11px] tracking-[0.08em] font-semibold transition-colors border-l border-[#D8CCBE]",
+                        language === "te" ? "bg-[#0A0A0A] text-white" : "bg-transparent text-[#1A1A1A]"
+                      )}
+                    >
+                      తెలు
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleNavClick("#register")}
+                      className="w-full px-4 py-3 bg-[#F8F5F0] text-[#1A1A1A] font-semibold uppercase tracking-[0.1em] border border-[#D8CCBE] rounded-full flex items-center justify-center gap-2"
+                    >
+                      <Droplet className="w-4 h-4 text-[#DC2626]" />
+                      {language === "te" ? "రక్తదానం" : "Donate Blood"}
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleNavClick("#donate")}
+                      className="w-full px-4 py-3 bg-black text-white font-semibold uppercase tracking-[0.1em] border border-black rounded-full flex items-center justify-center gap-2"
+                    >
+                      <Heart className="w-4 h-4" />
+                      {language === "te" ? "సహకరించండి" : "Contribute"}
+                    </motion.button>
+                  </div>
                 </motion.div>
               </div>
             </motion.div>
